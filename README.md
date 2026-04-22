@@ -1,21 +1,13 @@
-# React + TypeScript + Vite + shadcn/ui
+# MMOTORS Front
+<details>
+<summary>Git flow</summary>
 
-This is a template for a new Vite project with React, TypeScript, and shadcn/ui.
+Workflow simple basé sur trois branches actives :
 
-## Adding components
+- **main** : contient la version stable et déployable du code.
+- **dev** : centralise mes développements en cours. Une fois le code testé, il est mergé vers **main** via une PR.
+- **chore/*** : créée depuis **dev** pour contenir le travail fait sur la base du projet
+- **feature/*** : créée depuis **dev**, utilisée pour développer les fonctionnalités, puis intégrée via une PR après validation des tests.
+- **fix/*** : créée depuis dev pour contenir les développement réaliser dans le cadre de corrections de bugs
 
-To add components to your app, run the following command:
-
-```bash
-npx shadcn@latest add button
-```
-
-This will place the ui components in the `src/components` directory.
-
-## Using components
-
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button"
-```
+</details>
