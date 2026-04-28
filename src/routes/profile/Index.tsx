@@ -1,14 +1,23 @@
-import { useParams } from "react-router"
+import useStore from "@/routes/auth/userStore"
+import type { User } from "@/types/UserType";
+import { useNavigate } from "react-router";
 
 export default function Profile() {
-    //fetch userid from url params
-    const { id } = useParams()
+    const navigate = useNavigate();
+    //fetch userid from userStore
+    const user: User | null = useStore((state: any) => state.user)
+
+    if (!user) {
+        navigate("/auth/login");
+        return null;
+    }
+
     return (
         <div className="flex min-h-svh p-6">
         <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
             <div>
             <h1 className="font-medium">Profile</h1>
-            <p>Visible uniquement pour vous utilisateur {id}</p>
+            <p>Visible uniquement pour vous utilisateur {user.id}</p>
             </div>
         </div>
         </div>
