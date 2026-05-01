@@ -1,13 +1,15 @@
-import { Outlet } from "react-router";
+import { Link, Outlet } from "react-router";
+import { Button } from "@/components/ui/button";
 
 export default function AuthLayout() {
   return (
-    <div className="flex min-h-svh bg-slate-200 p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
+    <div className="flex w-full align-middle justify-center items-center min-h-svh bg-slate-200 p-6">
         <div>
+            <Button variant="ghost" className="text-slate-500">
+                <Link to="/">&lt;&lt; Retour à l'accueil</Link>
+            </Button>
           <Outlet />
         </div>
-      </div>
     </div>
   )
 }
