@@ -17,23 +17,27 @@ createRoot(document.getElementById("root")!).render(
     <ThemeProvider>
       <BrowserRouter>
         <Routes>
+          //home and about routes
           <Route path="/" element={<Layout />} >
             <Route index element={<Home />} />
           </Route>
           <Route path="/about" element={<Layout />} >
             <Route index element={<About />} />
           </Route>
+
+          //authentication routes
           <Route path="/auth" element={<AuthLayout />} >
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
           </Route>
+
+          //catalogue route
           <Route path="/catalogue" element={<Layout />} >
             <Route index element={<Vehicles />} />
             {/* <Route  path="locations" element={<Vehicles />} /> */}
           </Route>
 
           //protected route, only accessible if user is logged in
-
           <Route path="/profile" element={<Layout />} >
             <Route index element={<Profile />} />
           </Route>

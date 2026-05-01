@@ -12,7 +12,7 @@ const useStore = create<UserStore>()(
     persist(
         (set) => ({
             user: null,
-            login: () => set({ user: { id: 1, name: 'Bibi Mbap', email: 'bibi.mbap@example.com', role: 'USER' } }),
+            login: () => set({ user: { id: 1, name: 'Bibi Mbap', email: 'bibi.mbap@example.com', role: 'STAFF' } }),
             logout: () => set({ user: null }),
         }),
         {

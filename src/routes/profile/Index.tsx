@@ -1,25 +1,26 @@
 import useStore from "@/routes/auth/userStore"
 import type { User } from "@/types/UserType";
 import { useNavigate } from "react-router";
+import ProfileLayout from "./Layout";
+import { sidebarData, type SideBarSectionType } from "@/types/SideBarSectionType";
+import StaffProfile from "../../components/profiles/StaffProfile";
+import CustomerProfile from "../../components/profiles/CustomerProfile";
 
 export default function Profile() {
     const navigate = useNavigate();
     //fetch userid from userStore
     const user: User | null = useStore((state: any) => state.user)
-
+    const sections: SideBarSectionType | undefined = sidebarData.navMain.find(section => section.type.toLowerCase() === user?.role.toLowerCase())
     if (!user) {
         navigate("/auth/login");
         return null;
     }
 
     return (
-        <div className="flex min-h-svh p-6">
-        <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-            <div>
-            <h1 className="font-medium">Profile</h1>
-            <p>Visible uniquement pour vous utilisateur {user.id}</p>
-            </div>
-        </div>
-        </div>
+        <ProfileLayout 
+            sections={sections}
+        >
+            {user.role === "STAFF" ? <StaffProfile /> : <CustomerProfile />}
+        </ProfileLayout>
     )
 }
