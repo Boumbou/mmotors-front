@@ -2,7 +2,6 @@ import { NavLink } from "react-router";
 import { Button } from "./ui/button";
 import useStore from '../routes/auth/userStore';
 import type { User } from "@/types/UserType";
-import { use } from "react";
 
 export default function NavBar() {
     const user : User | null = useStore((state: any) => state.user);

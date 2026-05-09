@@ -13,5 +13,16 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+    
+  },
+  //add proxy configuration for development server
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5049',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
 })
