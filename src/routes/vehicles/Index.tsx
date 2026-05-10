@@ -1,4 +1,4 @@
-import type { VehicleType } from "@/types/VehicleType";
+import { ListingType, listingTypeLabels, motorizationLabels, type VehicleType } from "@/types/VehicleType";
 import { Link, useSearchParams } from "react-router"
 
 import {
@@ -17,7 +17,7 @@ export default function Vehicles() {
     //get last url section to determine if we are in achats or locations
     const [searchParams] = useSearchParams();
     const transactionType = searchParams.get("type") || null;
-    const type = transactionType == "achats" ? 0 : transactionType === "locations" ? 1 : null;
+    const type = transactionType == "achats" ? "sale" : transactionType === "locations" ? "rental" : null;
     const [vehicles, setVehicles] = useState<VehicleType[]>([]);
     const [loading, setLoading] = useState(false);
 
@@ -26,7 +26,7 @@ export default function Vehicles() {
         const fetchVehiclesByType = async () => {
             setLoading(true);
             const fetchedVehicles = await fetchVehicles();
-            setVehicles(fetchedVehicles.filter((vehicle) => {return vehicle.listingType == type})); // filter vehicles by transaction type
+            setVehicles(fetchedVehicles); 
             setLoading(false);
         };
         fetchVehiclesByType();
@@ -34,7 +34,7 @@ export default function Vehicles() {
 
     //fetch vehicles from /api/vehicles
     const fetchVehicles = async (): Promise<VehicleType[]> => {
-        const response = await fetch("/api/vehicles");
+        const response = await fetch("/api/vehicles?type=" + type);
         const data = await response.json();
         return data;
     }
@@ -57,9 +57,9 @@ export default function Vehicles() {
                 <CardHeader>
                   <div className="flex flex-row">
                     <CardTitle>{vehicle.brand} {vehicle.model}</CardTitle>
-                    <Badge variant="secondary" className="ml-auto">{vehicle.listingType === 0 ? "Achat" : "Location"}</Badge>
+                    <Badge variant="secondary" className="ml-auto">{listingTypeLabels[vehicle.listingType]}</Badge>
                   </div>
-                  <CardDescription>{vehicle.year} - {vehicle.motorization}</CardDescription>
+                  <CardDescription>{vehicle.year} - {motorizationLabels[vehicle.motorization]}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <p>Kilometrage: {vehicle.mileage} km</p>
@@ -73,7 +73,7 @@ export default function Vehicles() {
               </Card>
             ))}
             {vehicles.length == 0 && !loading && (
-              <img src="/NoResult.png" alt="No results" className="w-full h-100 object-cover rounded-none mask" />
+              <img src="/NoResult.png" alt="No results" className="w-full h-100 object-cover rounded-none mask-x-from-70% mask-x-to-90% mask-y-from-70% mask-y-to-90%" />
             )}
           </div>
         </div>
