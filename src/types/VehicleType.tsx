@@ -19,6 +19,13 @@
     public string? ImageKey { get; set; }
 */
 
+export type VehicleListResponse = {
+    items: VehicleType[];
+    totalCount: number;
+    pageNumber: number;
+    pageSize: number;
+    totalPages: number;
+}
 
 export type VehicleType = {
     id: number;

@@ -11,8 +11,8 @@ export default function NavBar() {
         <div className="flex p-10 items-center justify-between gap-10 flex-row h-10 w-full sticky top-0 bg-background border-b">
             <h2 className="flex font-bold" >MMOTORS</h2>
             <ul className="flex flex-row gap-5">
-                <NavLink to="/catalogue?type=achats" className={(isActive) => isActive ? "text-blue-500" : "text-black"}>Acheter</NavLink>
-                <NavLink to="/catalogue?type=locations" className={(isActive) => isActive ? "text-blue-500" : "text-black"}>Louer</NavLink>
+                <NavLink to="/catalogue?type=achats&pagenumber=1&pagesize=1" className={(isActive) => isActive ? "text-blue-500" : "text-black"}>Acheter</NavLink>
+                <NavLink to="/catalogue?type=locations&pagenumber=1&pagesize=1" className={(isActive) => isActive ? "text-blue-500" : "text-black"}>Louer</NavLink>
                 <NavLink to="/about" className={(isActive) => isActive ? "text-blue-500" : "text-black"}>A propos</NavLink>
             </ul>
             {user ? (
