@@ -93,7 +93,7 @@ export default function Vehicles() {
                       <p>Prix: {vehicle.listedAmount} €</p>
                     </CardContent>
                     <CardFooter>
-                      <Link to={`/vehicles/${vehicle.id}`}>
+                      <Link to={`/catalogue/vehicle/${vehicle.id}`}>
                         <CardAction>Voir les détails</CardAction>
                       </Link>
                     </CardFooter>

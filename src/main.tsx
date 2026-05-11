@@ -11,6 +11,7 @@ import Register from "./routes/auth/Register.tsx"
 import Vehicles from "./routes/vehicles/Index.tsx"
 import About from "./routes/about/Index.tsx"
 import AuthLayout from "./routes/auth/Layout.tsx"
+import VehicleDetails from "./routes/vehicleDetails/Index.tsx"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -34,6 +35,7 @@ createRoot(document.getElementById("root")!).render(
           //catalogue route
           <Route path="/catalogue" element={<Layout />} >
             <Route index element={<Vehicles />} />
+            <Route path="vehicle/:id" element={<VehicleDetails />} />
             {/* <Route  path="locations" element={<Vehicles />} /> */}
           </Route>
 
