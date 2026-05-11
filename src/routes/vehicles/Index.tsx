@@ -10,10 +10,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationEllipsis, PaginationLink, PaginationPrevious } from "@/components/ui/pagination";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import MmotorsPagination from "@/components/pagination/MmotorsPagination";
 
 export default function Vehicles() {
     //get last url section to determine if we are in achats or locations
@@ -59,29 +59,9 @@ export default function Vehicles() {
       fetchVehicles(page).then((data) => setVehiclesResponse(data));
     }
 
-    const MmotorsPagination = (props: { currentPage: number })=> {
-      const { currentPage } = props;
-
-      return(
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              { currentPage>1 && <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} />}
-            </PaginationItem>
-            <PaginationItem>
-              {`page ${currentPage} sur ${vehiclesResponse.totalPages}`}
-            </PaginationItem>
-            <PaginationItem>
-              { currentPage<vehiclesResponse.totalPages && <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />}
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      )
-    }
-
     return (
       <>
-        <div className="flex min-h-80% justify-start p-6">
+        <div className="flex min-h-80% justify-start p-6 mx-30">
           <div className="flex min-w-80 flex-col gap-4 text-sm leading-loose">
             <div>
               <h1 className="font-medium text-4xl">Vehicles</h1>
@@ -127,7 +107,11 @@ export default function Vehicles() {
           </div>
         </div>
       <div className="flex">
-        <MmotorsPagination currentPage={parseInt(searchParams.get("pagenumber")!)||1}/>
+        <MmotorsPagination
+          currentPage={parseInt(searchParams.get("pagenumber")!) || 1}
+          totalPages={vehiclesResponse.totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
     </>
   )
