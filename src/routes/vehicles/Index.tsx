@@ -25,7 +25,7 @@ export default function Vehicles() {
     useEffect(() => {
       //fetch vehicles from /api/vehicles?type=transactionType
       const fetchVehiclesByType = async () => {
-        const fetchedVehicles = await fetchVehicles();
+        const fetchedVehicles = await fetchVehicles(parseInt(searchParams.get("pagenumber")!));
         setVehiclesResponse(fetchedVehicles); 
       };
       fetchVehiclesByType();
@@ -93,7 +93,7 @@ export default function Vehicles() {
                       <p>Prix: {vehicle.listedAmount} €</p>
                     </CardContent>
                     <CardFooter>
-                      <Link to={`/catalogue/vehicle/${vehicle.id}`}>
+                      <Link to={`/catalogue/vehicle/${vehicle.id}?${searchParams.toString()}`} className="w-full">
                         <CardAction>Voir les détails</CardAction>
                       </Link>
                     </CardFooter>
