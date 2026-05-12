@@ -1,8 +1,24 @@
 type User = {
     id: number;
+    created: string;
     name: string;
+    lastName: string;
     email: string;
-    role: 'ADMIN' | 'CUSTOMER' | 'STAFF';
+    role: string[];
+    token: string;
+
 };
 
-export type { User };
+
+type LoginRequest = {
+    Email: string;
+    Password: string;
+};
+
+type LoginResponse = {
+    result: 'success' | 'error';
+    user: User;
+    token: string;
+};
+
+export type { User, LoginRequest, LoginResponse };

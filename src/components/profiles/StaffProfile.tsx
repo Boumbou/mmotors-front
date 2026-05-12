@@ -17,7 +17,8 @@ export default function StaffProfile() {
                 <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
                     <div>
                     <h1 className="font-medium">Profile Staff</h1>
-                    <p>Visible uniquement pour collaborateur {user.id}</p>
+                    <p>Visible uniquement pour collaborateur {user.name} {user.lastName}</p>
+                    <p>Au boulot =)</p>
                     </div>
                 </div>
             </div>

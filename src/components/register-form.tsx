@@ -11,15 +11,27 @@ import {
 import { Input } from "@/components/ui/input"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { LayoutBottomIcon } from "@hugeicons/core-free-icons"
+import { useState } from "react"
 
 export function RegisterForm({
   className,
   handleSubmit,
   ...props
-}: React.ComponentProps<"div"> & { handleSubmit: () => void }) {
+}: React.ComponentProps<"div"> & { handleSubmit: (email: string, password: string, name: string, lastName: string) => void }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [lastName, setLastName] = useState("");
+  
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSubmit(email, password, name, lastName);
+  };
+
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <form>
+      <form onSubmit={onSubmit}>
         <FieldGroup>
           <div className="flex flex-col items-center gap-2 text-center">
             <a
@@ -37,11 +49,24 @@ export function RegisterForm({
             </FieldDescription>
           </div>
           <Field>
-            <FieldLabel htmlFor="name">Nom d'utilisateur</FieldLabel>
+            <FieldLabel htmlFor="lastname">Nom</FieldLabel>
+            <Input
+              id="lastname"
+              type="text"
+              placeholder="Votre nom"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              // required
+            />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="name">Prénom</FieldLabel>
             <Input
               id="name"
               type="text"
-              placeholder="Votre nom d'utilisateur"
+              placeholder="Votre prénom"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               // required
             />
           </Field>
@@ -51,6 +76,8 @@ export function RegisterForm({
               id="email"
               type="email"
               placeholder="m@exemple.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               // required
             />
           </Field>
@@ -60,11 +87,13 @@ export function RegisterForm({
               id="password"
               type="password"
               placeholder="saisissez votre mot de passe"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               // required
             />
           </Field>
           <Field>
-            <Button type="submit" onClick={handleSubmit}>S'inscrire</Button>
+            <Button type="submit" disabled={!email || !password || !name || !lastName}>S'inscrire</Button>
           </Field>
         </FieldGroup>
       </form>

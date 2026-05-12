@@ -10,7 +10,7 @@ export default function Profile() {
     const navigate = useNavigate();
     //fetch userid from userStore
     const user: User | null = useStore((state: any) => state.user)
-    const sections: SideBarSectionType | undefined = sidebarData.navMain.find(section => section.type.toLowerCase() === user?.role.toLowerCase())
+    const sections: SideBarSectionType | undefined = sidebarData.navMain.find(section => section.type.toLowerCase() === user?.role[0].toLowerCase())
     if (!user) {
         navigate("/auth/login");
         return null;
@@ -20,7 +20,7 @@ export default function Profile() {
         <ProfileLayout 
             sections={sections}
         >
-            {user.role === "STAFF" ? <StaffProfile /> : <CustomerProfile />}
+            {user.role.includes("Staff") ? <StaffProfile /> : <CustomerProfile />}
         </ProfileLayout>
     )
 }

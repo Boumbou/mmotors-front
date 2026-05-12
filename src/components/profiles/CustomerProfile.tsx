@@ -17,7 +17,8 @@ export default function CustomerProfile() {
                 <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
                     <div>
                     <h1 className="font-medium">Profile Client</h1>
-                    <p>Visible uniquement pour client {user.id}</p>
+                    <p>Visible uniquement pour vous {user.name} {user.lastName}</p>
+                    <p>Content de vous revoir !</p>
                     </div>
                 </div>
             </div>
