@@ -12,6 +12,7 @@ import Vehicles from "./routes/vehicles/Index.tsx"
 import About from "./routes/about/Index.tsx"
 import AuthLayout from "./routes/auth/Layout.tsx"
 import VehicleDetails from "./routes/vehicleDetails/Index.tsx"
+import Application from "./routes/application/Index.tsx"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -42,6 +43,9 @@ createRoot(document.getElementById("root")!).render(
           //protected route, only accessible if user is logged in
           <Route path="/profile" element={<Layout />} >
             <Route index element={<Profile />} />
+          </Route>
+          <Route path="/application" element={<Layout />} >
+            <Route index element={<Application />} />
           </Route>
 
 

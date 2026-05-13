@@ -10,7 +10,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-wrap gap-2 justify-center flex-row md:mt-30 mt-10 md:px-50 px-10">
+    <div className="flex basis-full flex-wrap gap-10 justify-center flex-row">
       <h1 className="flex md:basis-1/4 text-8xl font-extrabold leading-20 uppercase pt-10 mb-5">{"Roulez\navec\npassion"}</h1>
       <div className="flex flex-col md:basis-1/4 justify-center">
           <img src="/landingPageImage.png" alt="home" className="flex min-w-full rounded-lg object-contain" />

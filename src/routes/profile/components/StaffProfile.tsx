@@ -1,3 +1,4 @@
+import InConstruction from "@/components/InConstruction";
 import useStore from "@/routes/auth/userStore"
 import type { User } from "@/types/UserType";
 import { useNavigate } from "react-router";
@@ -12,15 +13,14 @@ export default function StaffProfile() {
     }
 
     return (
-        
-            <div className="flex min-h-svh p-6">
-                <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-                    <div>
+        <div className="flex min-h-svh p-6">
+            <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
+                <div>
                     <h1 className="font-medium">Profile Staff</h1>
                     <p>Visible uniquement pour collaborateur {user.name} {user.lastName}</p>
-                    <p>Au boulot =)</p>
-                    </div>
+                    <InConstruction />  
                 </div>
             </div>
+        </div>
     )
 }

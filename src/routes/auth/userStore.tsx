@@ -4,8 +4,8 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 
 type UserStore = {
     user: User | null;
-    register: (email: string, password: string, name: string, lastName: string) => Promise<void>;
-    login: (email: string, password: string) => Promise<void>;
+    register: (email: string, password: string, name: string, lastName: string) => Promise<string>;
+    login: (email: string, password: string) => Promise<string>;
     logout: () => void;
 };
 
@@ -37,7 +37,7 @@ const loginRequest = async (email: string, password: string): Promise<User> => {
         email: user.email,
         name: user.name,
         lastName: user.lastName,
-        role: parseTokenRoles(token),
+        roles: parseTokenRoles(token),
         token: token,
     };
     return userData;
@@ -51,7 +51,7 @@ const registerRequest = async (email: string, password: string, name: string, la
         },
         body: JSON.stringify({ Email: email, Password: password, Name: name, LastName: lastName }),
     }).then((res) => res.json());
-    if (!response.result.succeeded){
+    if (response?.result){
         return Promise.reject(new Error("Oops nous n'avons pas pu vous inscrire, veuillez vérifier vos informations et réessayer."));
     }
     const { user, token } = response;
@@ -61,7 +61,7 @@ const registerRequest = async (email: string, password: string, name: string, la
         email: user.email,
         name: user.name,
         lastName: user.lastName,
-        role: parseTokenRoles(token),
+        roles: parseTokenRoles(token),
         token: token,
     };
     return userData;
@@ -74,10 +74,22 @@ const useStore = create<UserStore>()(
             register: async (email: string, password: string, name: string, lastName: string) => {
                 const user = await registerRequest(email, password, name, lastName);
                 set({ user });
+
+                if (!user) {
+                    return Promise.reject(new Error("Erreur lors de l'inscription : utilisateur non trouvé après inscription."));
+                }
+
+                return "Inscription réussie";
             },
             login: async (email: string, password: string) => {
                 const user = await loginRequest(email, password);
                 set({ user });
+
+                if (!user) {
+                    return Promise.reject(new Error("Erreur lors de la connexion : utilisateur non trouvé après connexion."));
+                }
+
+                return "Connexion réussie";
             },
             logout: () => set({ user: null }),
         }),

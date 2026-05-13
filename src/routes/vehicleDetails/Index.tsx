@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { listingTypeLabels, type VehicleType } from "../../types/VehicleType";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Folder01Icon } from "@hugeicons/core-free-icons";
-import {  FieldGroup, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { Folder01Icon, Info } from "@hugeicons/core-free-icons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import useStore from "../auth/userStore";
 
 export default function VehicleDetails() {
     const [vehicle, setVehicle] = useState<VehicleType | null>(null);
@@ -15,6 +14,8 @@ export default function VehicleDetails() {
     const [error, setError] = useState<string | null>(null);
     const currentVehicleId:number = parseInt(window.location.pathname.split("/").pop() || "0");
     const location = useLocation();
+    const user = useStore((state: any) => state.user);
+    const navigate = useNavigate();
 
     const fetchVehicleDetails = async (id: number) => {
         setLoading(true);
@@ -45,7 +46,9 @@ export default function VehicleDetails() {
         {loading && <p>Loading...</p>}
         {error && <p style={{ color: "red" }}>{error}</p>}
         {vehicle && (
-            <div className="flex flex-col gap-5 md:mx-30 mx-5 md:justify-start justify-center mt-10">
+            // <div className="flex flex-col gap-5 md:mx-30 mx-5 md:justify-start justify-center mt-10">
+            <>
+            
                 <Breadcrumb>
                     <BreadcrumbList>
                     <BreadcrumbItem>
@@ -62,27 +65,54 @@ export default function VehicleDetails() {
                     <div className=" md:min-100 md:max-w-150 basis-full rounded-lg bg-white">
                         <img src={vehicle.imageUrl || "/NoPicture.png"} alt={`${vehicle.brand} ${vehicle.model}`} className="w-auto h-full rounded-lg object-cover"/>
                     </div>
-                    <div className=" xl:min-100 xl:max-w-100 basis-full flex-col gap-10 p-20 align-stretch rounded-lg bg-white ">
-                        <div className="flex flex-row justify-between mb-10">
-                            <h2 className="md:text-2xl  text-lg font-medium">Soumettre un dossier</h2>
-                            <HugeiconsIcon icon={Folder01Icon} className="w-8 h-8 text-slate-500" />
+                    {/* display application option for customer only */}
+                    {(user?.roles.includes("Customer") || !user) && (
+                        <div className=" lg:basis-1/2 basis-full flex-col gap-10 p-8 align-stretch rounded-lg bg-white ">
+                            <div className="flex flex-row justify-between mb-10">
+                                <h2 className="md:text-2xl  text-lg font-medium">Soumettre un dossier</h2>
+                                <HugeiconsIcon icon={Folder01Icon} className="w-8 h-8 text-slate-500" />
+                            </div>
+                            {listingTypeLabels[vehicle.listingType] === "Location" ? (
+                                // write a paragraph to explain the process of submitting an application in simple terms
+                                <p className="text-slate-500 bg-slate-100 p-4 rounded-lg"> 
+                                    <HugeiconsIcon icon={Info} className="w-6 h-6 inline-block mr-2 mb-3" />
+                                    <em className="font-bold">Intéressé ?</em> <br /> 
+                                    Pour soumettre un dossier de location, veuillez cliquer sur le bouton "Soumettre". 
+                                    Vous serez redirigé vers une page de formulaire où vous pourrez sélectionner les services que 
+                                    vous souhaitez et fournir les informations et documents justificatifs. Une fois votre dossier soumis, 
+                                    notre équipe examinera votre demande et vous contactera pour les étapes suivantes.
+                                </p>
+                            ) : 
+                            (
+                                // write a paragraph to explain the process of submitting an application in simple terms
+                                <p className="text-slate-500 bg-slate-100 p-4 rounded-lg"> 
+                                    <HugeiconsIcon icon={Info} className="w-6 h-6 inline-block mr-2 mb-3" />
+                                    <em className="font-bold">Intéressé ?</em> <br /> 
+                                    Pour soumettre un dossier d'achat, veuillez cliquer sur le bouton "Soumettre". 
+                                    Vous serez redirigé vers une page de formulaire faire votre offre d'achat et fournir les informations
+                                    et documents justificatifs. Une fois votre dossier soumis, notre équipe examinera votre demande 
+                                    et vous contactera pour les étapes suivantes.
+                                </p>
+                            )
+                            }
+                            {user ?(
+                                <Button className="w-full bg-black mt-20" onClick={() => navigate("/application", { state: { vehicleId: vehicle } })}>Soumettre</Button>
+                            ) : (
+                                <>
+                                    <p>Connectez vous pour soumettre un dossier.</p>
+                                    <Button className="w-full bg-black mt-20" onClick={() => navigate("/auth/login", { state: { from: location.pathname } })}>Connectez-vous</Button>
+                                </>
+                            )}
+
+                            
                         </div>
-                        {listingTypeLabels[vehicle.listingType] === "Location" && (
-                            <FieldGroup className="flex flex-row gap-4">
-                                <Input id="driverLicense" name="driverLicense" type="checkbox" className="rounded-full border-gray-300 w-10 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
-                                <FieldLabel htmlFor="driverLicense" className="text-md font-medium text-gray-700">Permis de conduire</FieldLabel>
-                            </FieldGroup>
-                        )}
-                        
-                        <Button className="w-full bg-black mt-20" onClick={() => alert("Dossier soumis !")}>Soumettre</Button>
-                        
-                    </div>
+                    )}
                 </div>
                 <Badge variant="outline" className="w-fit text-lg p-5 bg-blue-100 border-blue-300">
                     { listingTypeLabels[vehicle.listingType]}
                 </Badge>
                 <h2 className="text-xl">--- Détails du véhicule</h2>
-                <div className="flex flex-row flex-wrap md:gap-20 gap-10">
+                <div className="flex flex-row flex-wrap md:gap-20 gap-10 mb-20">
                     <div className="flex-col w-50">
                         <p className="text-slate-400 italic font-light">Marque</p> 
                         <p>{vehicle.brand}</p>
@@ -100,7 +130,8 @@ export default function VehicleDetails() {
                         <p>{vehicle.listedAmount} €</p>
                     </div>
                 </div>
-            </div>
+            </>
+            // </div>
         )}
     </div>
   );

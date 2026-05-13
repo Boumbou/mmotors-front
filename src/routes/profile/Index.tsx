@@ -3,14 +3,14 @@ import type { User } from "@/types/UserType";
 import { useNavigate } from "react-router";
 import ProfileLayout from "./Layout";
 import { sidebarData, type SideBarSectionType } from "@/types/SideBarSectionType";
-import StaffProfile from "../../components/profiles/StaffProfile";
-import CustomerProfile from "../../components/profiles/CustomerProfile";
+import StaffProfile from "./components/StaffProfile";
+import CustomerProfile from "./components/CustomerProfile";
 
 export default function Profile() {
     const navigate = useNavigate();
     //fetch userid from userStore
     const user: User | null = useStore((state: any) => state.user)
-    const sections: SideBarSectionType | undefined = sidebarData.navMain.find(section => section.type.toLowerCase() === user?.role[0].toLowerCase())
+    const sections: SideBarSectionType | undefined = sidebarData.navMain.find(section => section.type.toLowerCase() === user?.roles[0].toLowerCase())
     if (!user) {
         navigate("/auth/login");
         return null;
@@ -20,7 +20,7 @@ export default function Profile() {
         <ProfileLayout 
             sections={sections}
         >
-            {user.role.includes("Staff") ? <StaffProfile /> : <CustomerProfile />}
+            {user.roles.includes("Staff") ? <StaffProfile /> : <CustomerProfile />}
         </ProfileLayout>
     )
 }

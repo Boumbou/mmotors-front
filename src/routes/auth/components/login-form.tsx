@@ -9,17 +9,18 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { LayoutBottomIcon } from "@hugeicons/core-free-icons"
 import { useState } from "react"
+import { useNavigate } from "react-router"
 
 export function LoginForm({
   className,
   handleLogin,
+  destination,
   ...props
-}: React.ComponentProps<"div"> & { handleLogin: (email: string, password: string) => void }) {
+}: React.ComponentProps<"div"> & { handleLogin: (email: string, password: string) => void , destination: string }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +28,7 @@ export function LoginForm({
   }
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className={cn("flex basis-full flex-col gap-6 md:min-w-100", className)} {...props}>
       <form onSubmit={onSubmit}>
         <FieldGroup>
           <div className="flex flex-col items-center gap-2 text-center">
@@ -35,14 +36,14 @@ export function LoginForm({
               href="#"
               className="flex flex-col items-center gap-2 font-medium"
             >
-              <div className="flex size-8 items-center justify-center rounded-md">
-                <HugeiconsIcon icon={LayoutBottomIcon} strokeWidth={2} className="size-6" />
+              <div className="flex size-20 items-center justify-center rounded-md">
+                <img src="/MMotorsLogo.png" alt="MMotorsLogo" />
               </div>
-              <span className="sr-only">Acme Inc.</span>
+              <span className="sr-only">MMotors</span>
             </a>
             <h1 className="text-xl font-bold">Bienvenue chez MMotors</h1>
             <FieldDescription>
-              Pas encore inscrit ? <a href="/auth/register">Inscrivez-vous</a>
+              Pas encore inscrit ? <Button variant="link" onClick={() => navigate("/auth/register", { state: { from: destination } })}>Inscrivez-vous</Button>
             </FieldDescription>
           </div>
           <Field>
@@ -72,10 +73,7 @@ export function LoginForm({
           </Field>
         </FieldGroup>
       </form>
-      <FieldDescription className="px-6 text-center">
-        En cliquant sur continuer, vous acceptez nos <a href="#">Conditions d'utilisation</a>{" "}
-        et notre <a href="#">Politique de confidentialité</a>.
-      </FieldDescription>
+    
     </div>
   )
 }

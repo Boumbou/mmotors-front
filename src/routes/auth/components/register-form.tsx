@@ -9,9 +9,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { LayoutBottomIcon } from "@hugeicons/core-free-icons"
-import { useState } from "react"
+import { useState, type SyntheticEvent } from "react"
 
 export function RegisterForm({
   className,
@@ -23,7 +21,7 @@ export function RegisterForm({
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
   
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     handleSubmit(email, password, name, lastName);
   };
@@ -38,10 +36,10 @@ export function RegisterForm({
               href="#"
               className="flex flex-col items-center gap-2 font-medium"
             >
-              <div className="flex size-8 items-center justify-center rounded-md">
-                <HugeiconsIcon icon={LayoutBottomIcon} strokeWidth={2} className="size-6" />
+              <div className="flex size-20 items-center justify-center rounded-md">
+                <img src="/MMotorsLogo.png" alt="MMotorsLogo" />
               </div>
-              <span className="sr-only">Acme Inc.</span>
+              <span className="sr-only">MMotors</span>
             </a>
             <h1 className="text-xl font-bold">Bienvenue chez MMotors</h1>
             <FieldDescription>
@@ -93,12 +91,12 @@ export function RegisterForm({
             />
           </Field>
           <Field>
-            <Button type="submit" disabled={!email || !password || !name || !lastName}>S'inscrire</Button>
+            <Button type="submit" disabled={!email || !password || !name || !lastName}>M'inscrire</Button>
           </Field>
         </FieldGroup>
       </form>
       <FieldDescription className="px-6 text-center">
-        En cliquant sur continuer, vous acceptez nos <a href="#">Conditions d'utilisation</a>{" "}
+        En cliquant sur M'inscrire, vous acceptez nos <a href="#">Conditions d'utilisation</a>{" "}
         et notre <a href="#">Politique de confidentialité</a>.
       </FieldDescription>
     </div>

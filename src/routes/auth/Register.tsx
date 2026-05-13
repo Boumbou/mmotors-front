@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import useStore  from "./userStore";
-import { RegisterForm } from "@/components/register-form";
+import { RegisterForm } from "@/routes/auth/components/register-form";
 
 export default function Register() {
   const register = useStore((state: any) => state.register);
@@ -9,9 +9,14 @@ export default function Register() {
   
   const handleRegister = async (email: string, password: string, name: string, lastName: string) => {
     try {
-      await register(email, password, name, lastName).catch((error: Error) => {
+      const response = await register(email, password, name, lastName).catch((error: Error) => {
+        alert("Erreur lors de l'inscription : veuillez vérifier vos informations et réessayer.");
         throw new Error(`Erreur lors de l'inscription : ${error.message}`);
       });
+      if (response !== "Inscription réussie") {
+        alert("Erreur lors de l'inscription : veuillez vérifier vos informations et réessayer.");
+        throw new Error(response);
+      }
       navigate(destinationPage);
     } catch (error) {
       console.error(error);
