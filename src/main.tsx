@@ -46,6 +46,7 @@ createRoot(document.getElementById("root")!).render(
           </Route>
           <Route path="/application" element={<Layout />} >
             <Route index element={<Application />} />
+            <Route path=":id" element={<Application />} />
           </Route>
 
 

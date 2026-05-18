@@ -51,6 +51,7 @@ export const listingTypeLabels: Record<ListingType, string> = {
   [ListingType.SALE]: "Achat",
   [ListingType.RENTAL]: "Location",
 };
+
 export type ListingType = typeof ListingType[keyof typeof ListingType];
 
 export const VehicleStatus = {

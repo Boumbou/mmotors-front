@@ -1,11 +1,13 @@
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 import { Button } from "./ui/button";
 import useStore from '../routes/auth/userStore';
 import type { User } from "@/types/UserType";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 
 export default function NavBar() {
     const user : User | null = useStore((state: any) => state.user);
     const logout = useStore((state: any) => state.logout);
+    const navigate = useNavigate();
 
     return (
         <div className="flex p-10 items-center justify-between gap-10 flex-row h-10 w-full sticky top-0 bg-background ">
@@ -16,7 +18,20 @@ export default function NavBar() {
                 <NavLink to="/about" className={(isActive) => isActive ? "text-blue-500" : "text-black"}>A propos</NavLink> */}
             </ul>
             {user ? (
-                <Button variant="ghost" size="lg" onClick={logout}>Se déconnecter</Button>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="default" className="h-10 w-10 rounded-full bg-slate-500" size="lg">{String(user.name).toUpperCase().substring(0, 1)}</Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+
+                        <DropdownMenuItem variant="default" onClick={() => navigate("/profile")}>
+                            Mon profil
+                        </DropdownMenuItem>
+                        <DropdownMenuItem variant="destructive" onClick={logout}>
+                            Se déconnecter
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             ) : (
                 <NavLink to="/auth/login">
                     <Button variant="ghost" size="lg"> Se connecter</Button>
