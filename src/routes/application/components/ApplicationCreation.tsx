@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Money, ValidationApprovalIcon, NewJobIcon, HotPriceIcon, CashIcon, Calendar, Save } from "@hugeicons/core-free-icons";
 import { Separator } from "@/components/ui/separator";
-import { useState } from "react";
 import { listingTypeLabels, motorizationLabels, type VehicleType } from "@/types/VehicleType";
 import { overheadType, type ServiceType } from "@/types/ServiceType";
 

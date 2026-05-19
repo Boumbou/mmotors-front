@@ -9,33 +9,53 @@ import { toast } from "sonner";
 import type { ApplicationType } from "@/types/ApplicationType";
 import ApplicationCreation from "./components/ApplicationCreation";
 import ApplicationManagement from "./components/ApplicationManagement";
+import type { User } from "@/types/UserType";
+import NoResult from "@/components/NoResult";
 
 export default function Application() {
-    const user = useStore((state: any) => state.user);
+    const applicationId = parseInt(window.location.pathname.split("/").pop() || "0");
+    const user:User = useStore((state: any) => state.user);
     const navigate = useNavigate();
     const location = useLocation();
     const history = window.history;
     const [vehicle, setVehicle] = useState<VehicleType | null>( location.state?.vehicle || null);
-    const [services, setServices] = useState<ServiceType[]>(location.state?.services || []);
+    const services: ServiceType[] = location.state?.services || [];
+    const [appliedServices, setAppliedServices] = useState([]);
     const [loading, setLoading] = useState(true);
     const [application, setApplication] = useState<ApplicationType | null>(null);
+    const [totalOverhead, setTotalOverhead] = useState(0);
+    const [error, setError] = useState<string | null>(null);
 
-    const fetchVehicleDetails = async (id: number) => {
-        try {
-            const response = await fetch(`/api/vehicles/${id}`);
-            if (!response.ok) {
-                throw new Error("Failed to fetch vehicle details");
+    
+    useEffect(() => {
+        const fetchData = async () => {
+            // if application id is in the url, fetch application details and set application state
+            if (applicationId) {
+                await fetchApplicationDetails(applicationId);
             }
-            const data = await response.json();
-            setVehicle(data);
-        } catch (err: any) {
-            console.error(err.message);
-            toast.error("Erreur lors du chargement des détails du véhicule");
-        }
-    }
+        };
+        fetchData();
+    }, []);
+    
+    // const fetchVehicleDetails = async (id: number) => {
+    //     try {
+    //         const response = await fetch(`/api/vehicles/${id}`);
+    //         if (!response.ok) {
+    //             throw new Error("Failed to fetch vehicle details");
+    //         }
+    //         const data = await response.json();
+    //         setVehicle(data);
+    //         await setTotalOverhead(calculateTotalOverhead());
+    //         setLoading(false);
+    //     } catch (err: any) {
+    //         console.error(err.message);
+    //         toast.error("Erreur lors du chargement des détails du véhicule");
+    //     }
+    // }
 
     const fetchApplicationDetails = async (id:number) => {
         try {
+            setError(null);
             const response = await fetch(`/api/applications/${id}`, {
                 headers: {
                     "Authorization": `Bearer ${user.token}`
@@ -46,27 +66,41 @@ export default function Application() {
             }
             const data = await response.json();
             setApplication(data);
-            setServices(data.applicationServices || []);
-            await fetchVehicleDetails(data.vehicleId);
+            setAppliedServices(data.applicationServices);
+            setVehicle(data.vehicle);
+            setTotalOverhead(calculateTotalOverhead());
+            setLoading(false);
 
         } catch (error) {
             console.error("Error fetching application details:", error);
             toast.error("Erreur lors du chargement du dossier");
-        } finally {
             setLoading(false);
+            setError("Erreur lors du chargement du dossier");
         }
 
     }
 
+    //calculate overhead for a service based on its type and value, and the vehicle price if it's a percentage
     const calculateOverhead = (service: ServiceType) => {
         if (!vehicle) return 0;
         return service.overheadType === overheadType.Percentage ? 
         service.overheadValue * vehicle.listedAmount : 
         service.overheadValue;
     }
+    
+    const calculateTotalOverhead = () => {
+        const effectiveServices = application ? application.applicationServices : services
+        console.log("Effective services for overhead calculation:", effectiveServices);
+        if (!effectiveServices || effectiveServices.length === 0) return 0;
 
-    const totalOverhead = services.reduce((total, service) => total + calculateOverhead(service), 0);
-
+        if (!vehicle) return 0;
+        const total = effectiveServices.reduce((acc:number, service: any) => {
+            const overhead = application ? service.calculatedOverheadAmount : calculateOverhead(service);
+            return acc + overhead;
+        }, 0);
+        return total;
+    }
+    
     const onCreateApplication = async () => {
         if (!vehicle) {
             toast.error("Véhicule non sélectionné");
@@ -82,7 +116,7 @@ export default function Application() {
             totalOverheadAmount: totalOverhead,
             serviceIds: services.map(service => service.id)
         };
-
+        
         try {
             const response = await fetch("/api/applications", {
                 method: "POST",
@@ -92,7 +126,7 @@ export default function Application() {
                 },
                 body: JSON.stringify(applicationData)
             });
-
+            
             if (!response.ok) {
                 throw new Error("Failed to create application");
             }
@@ -100,7 +134,7 @@ export default function Application() {
             // add the created application to the the path
             // location.pathname = location.pathname + `/${data.id}`;
             history.replaceState(null, "", location.pathname+ `/${data.id}`);
-
+            
             setApplication(data);
             toast.success("Dossier créé avec succès");
             console.log("Created application:", data);
@@ -111,15 +145,7 @@ export default function Application() {
             setLoading(false);
         }
     }
-
-    useEffect(() => {
-        // if application id is in the url, fetch application details and set application state
-        const applicationId = parseInt(window.location.pathname.split("/").pop() || "0");
-        if (applicationId) {
-            fetchApplicationDetails(applicationId);
-        }
-        setLoading(false);
-    }, []);
+    
 
     if (!user) {
             return (
@@ -145,21 +171,25 @@ export default function Application() {
                         </>
                     ) : (
                         <BreadcrumbItem>
-                            <BreadcrumbLink onClick={() => navigate(location.state.origin, { state: { section: "applications" } })}>Mes dossiers</BreadcrumbLink>
+                            <BreadcrumbLink onClick={() => navigate(location.state.origin, { state: { section: "applications" } })}>{user.roles.includes("Customer") ? "Mes dossiers" : "Dossiers en cours"}</BreadcrumbLink>
                         </BreadcrumbItem>
                     )}
                 </BreadcrumbList>
             </Breadcrumb>
 
 
-            {loading ? (<p>Loading...</p>)
-            :(
-                <>
-                    { !application &&<ApplicationCreation vehicle={vehicle!} services={services} totalOverhead={totalOverhead} calculateOverhead={calculateOverhead} onCreateApplication={onCreateApplication} />}
-        
-                    { application &&<ApplicationManagement vehicle={vehicle!} application={application!} totalOverhead={totalOverhead} motorizationLabels={motorizationLabels} />}
-                </>
-            )}
+            {error ? (
+                <NoResult />
+            ) : loading ? 
+                (<p>Loading...</p>)
+                :(
+                    <>
+                        { !application &&<ApplicationCreation vehicle={vehicle!} services={services} totalOverhead={totalOverhead} calculateOverhead={calculateOverhead} onCreateApplication={onCreateApplication} />}
+            
+                        { application &&<ApplicationManagement vehicle={vehicle!} application={application!} totalOverhead={calculateTotalOverhead()} motorizationLabels={motorizationLabels} />}
+                    </>
+                )
+            }
 
         </div>
     )

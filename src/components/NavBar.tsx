@@ -3,6 +3,8 @@ import { Button } from "./ui/button";
 import useStore from '../routes/auth/userStore';
 import type { User } from "@/types/UserType";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { User as UserIcon } from "@hugeicons/core-free-icons";
 
 export default function NavBar() {
     const user : User | null = useStore((state: any) => state.user);
@@ -23,6 +25,9 @@ export default function NavBar() {
                         <Button variant="default" className="h-10 w-10 rounded-full bg-slate-500" size="lg">{String(user.name).toUpperCase().substring(0, 1)}</Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
+                        <DropdownMenuItem variant="default" className="text-slate-900" disabled>
+                            <HugeiconsIcon icon={UserIcon} /> {user.name} {user.lastName}
+                        </DropdownMenuItem>
 
                         <DropdownMenuItem variant="default" onClick={() => navigate("/profile")}>
                             Mon profil

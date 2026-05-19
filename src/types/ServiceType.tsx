@@ -2,13 +2,13 @@
 export type ServiceType = {
     description: string
     id: number
-    isActive: boolean
-    isOptional: boolean
-    listingType: number
-    name: string
+    isActive?: boolean
+    isOptional?: boolean
+    listingType?: number
+    name?: string
     overheadType: overheadType
     overheadValue: number
-    updatedAt: string
+    updatedAt?: string
 }
 
 export const overheadType ={

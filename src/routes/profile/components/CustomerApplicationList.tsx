@@ -4,20 +4,36 @@ import { Eye, Folder } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Button } from "@/components/ui/button";
 import { useLocation, useNavigate } from "react-router";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function CustomerApplicationList({ applications, numberOfApplications, fetchNextPage }: { applications: ApplicationType[], numberOfApplications: number, fetchNextPage: () => void }) {
     const navigate = useNavigate();
     const location = useLocation();
+    const isLoading = false //applications.length === 0 && numberOfApplications > 0;
+
+    //create a skeleton loader for the application list
+    const ApplicationListSkeleton = ()=>{
+        return (
+            <>
+                {Array.from({ length: 5 }).map((_, index) => (
+                    <Skeleton key={index} className="w-full h-20 rounded-md" />
+                ))}
+            </>
+        );
+    };
     
     return (
         <div className="flex flex-col gap-4">
             {
+                isLoading ? 
+                <ApplicationListSkeleton /> : 
                 applications.map((application: ApplicationType) => (
                     <Card key={application.id} className="p-4 flex items-center flex-row rounded-md border">
                         <HugeiconsIcon icon={Folder} className="w-12 h-12 text-slate-300" />
                         <div className="w-full">
                             <h3 className="text-lg font-medium">Dossier #{application.id}</h3>
-                            <p className="text-sm text-slate-500">Statut : {ApplicationStatusMap[application.status]}</p>
+                            <Badge variant="secondary" className={`text-sm text-${ApplicationStatusMap[application.status].color}-600 bg-${ApplicationStatusMap[application.status].color}-100`}>Statut : {ApplicationStatusMap[application.status].label}</Badge>
                             <p className="text-sm text-slate-500">Date de création : {new Date(application.createdAt).toLocaleDateString()}</p>
                         </div>
                         <Button 

@@ -51,7 +51,7 @@ const registerRequest = async (email: string, password: string, name: string, la
         },
         body: JSON.stringify({ Email: email, Password: password, Name: name, LastName: lastName }),
     }).then((res) => res.json());
-    if (response?.result){
+    if (!response?.result?.succeeded) {
         return Promise.reject(new Error("Oops nous n'avons pas pu vous inscrire, veuillez vérifier vos informations et réessayer."));
     }
     const { user, token } = response;

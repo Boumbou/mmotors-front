@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router";
 
 export default function Home() {
@@ -21,6 +22,62 @@ export default function Home() {
             </ButtonGroup>
           </div>
       </div>
+      {/* add a super nice looking section to display latest vehicles using shadcn cards */}
+       <div className="flex self-left flex-col gap-4">
+        <h2 className="text-xl font-bold">Nos dernières offres</h2>
+        <div className="flex flex-row gap-4">
+          <Card className="w-64">
+            <CardHeader>
+              <CardTitle>Véhicule 1</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Marque: Renault</p>
+              <p>Modèle: Clio</p>
+              <p>Année: 2020</p>
+            </CardContent>
+          </Card>
+          <Card className="w-64">
+            <CardHeader>
+              <CardTitle>Véhicule 2</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Marque: Peugeot</p>
+              <p>Modèle: 208</p>
+              <p>Année: 2019</p>
+            </CardContent>
+          </Card>
+          <Card className="w-64">
+            <CardHeader>
+              <CardTitle>Véhicule 2</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Marque: Peugeot</p>
+              <p>Modèle: 208</p>
+              <p>Année: 2019</p>
+            </CardContent>
+          </Card>
+          <Card className="w-64">
+            <CardHeader>
+              <CardTitle>Véhicule 2</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Marque: Peugeot</p>
+              <p>Modèle: 208</p>
+              <p>Année: 2019</p>
+            </CardContent>
+          </Card>
+          <Card className="w-64">
+            <CardHeader>
+              <CardTitle>Véhicule 2</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Marque: Peugeot</p>
+              <p>Modèle: 208</p>
+              <p>Année: 2019</p>
+            </CardContent>
+          </Card>
+        </div>
+      </div> 
     </div>
   )
 }

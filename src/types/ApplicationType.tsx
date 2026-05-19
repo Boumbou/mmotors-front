@@ -1,8 +1,7 @@
-import type { ServiceType } from "./ServiceType"
-import type { ListingType } from "./VehicleType"
+import type { ListingType, VehicleType } from "./VehicleType"
 
 export type ApplicationType = {
-    applicationServices: ServiceType[]
+    applicationServices: any[]
     applicationType: ListingType
     createdAt: string
     documents: Array<{}>
@@ -13,6 +12,12 @@ export type ApplicationType = {
     updatedAt: string
     userId: string
     vehicleId: number
+    vehicle: VehicleType,
+    customer: {
+        name: string,
+        lastName: string,
+        email: string
+    }
 }
 
 export const ApplicationStatus ={
@@ -25,10 +30,10 @@ export const ApplicationStatus ={
 
 export type ApplicationStatus = typeof ApplicationStatus[keyof typeof ApplicationStatus];
 
-export const ApplicationStatusMap: { [key in ApplicationStatus]: string } = {
-    [ApplicationStatus.Draft]: "Brouillon",
-    [ApplicationStatus.OnHold]: "En attente",
-    [ApplicationStatus.Submitted]: "Soumis",
-    [ApplicationStatus.Approved]: "Approuvé",
-    [ApplicationStatus.Rejected]: "Rejeté"
+export const ApplicationStatusMap: { [key in ApplicationStatus]: {label: string, color: string} } = {
+    [ApplicationStatus.Draft]: {label:"Brouillon", color: "gray"},
+    [ApplicationStatus.OnHold]: {label:"En attente", color: "yellow"},
+    [ApplicationStatus.Submitted]: {label:"Soumis", color: "blue"},
+    [ApplicationStatus.Approved]: {label:"Approuvé", color: "green"},
+    [ApplicationStatus.Rejected]: {label:"Rejeté", color: "red"}
 }

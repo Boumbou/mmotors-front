@@ -2,12 +2,13 @@ import useStore from "@/routes/auth/userStore"
 import type { User } from "@/types/UserType";
 import { useLocation, useNavigate } from "react-router";
 import { sidebarData, type SideBarSectionType } from "@/types/SideBarSectionType";
-import StaffProfile from "./components/StaffProfile";
 import CustomerProfile from "./components/CustomerProfile";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEffect, useState } from "react";
 import type { ApplicationType } from "@/types/ApplicationType";
 import CustomerApplicationList from "./components/CustomerApplicationList";
+import Dashboard from "./components/Dashboard";
+import VehicleManagementList from "./components/VehicleManagementList";
 
 export default function Profile() {
     const navigate = useNavigate();
@@ -68,16 +69,22 @@ export default function Profile() {
                     ))}
                 </TabsList>
                 <TabsContent value="profile">
-                    {user.roles.includes("Staff") ? <StaffProfile /> : <CustomerProfile applications={applications} numberOfApplications={numberOfApplications}  changeSectionCallBack={handleSectionChange} />}
+                        <CustomerProfile applications={applications} numberOfApplications={numberOfApplications}  changeSectionCallBack={handleSectionChange} />
+                </TabsContent>
+                <TabsContent value="dashboard">
+                    <Dashboard applications={applications} numberOfApplications={numberOfApplications} />
                 </TabsContent>
                 <TabsContent value="applications">
                     <>
-                        {user.roles.includes("Staff") ?
+                        {/* {user.roles.includes("Staff") ?
                             <h1>Liste des dossiers en cours de traitement</h1>
-                            :
+                            : */}
                             <CustomerApplicationList applications={applications} numberOfApplications={numberOfApplications} fetchNextPage={fetchUserApplications} />
-                        }
+                        {/* } */}
                     </>
+                </TabsContent>
+                <TabsContent value="vehicles">
+                    <VehicleManagementList />
                 </TabsContent>
             </Tabs>
         </>
