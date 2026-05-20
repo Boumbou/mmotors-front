@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router";
 import useStore from "../auth/userStore";
 import NewApplication from "./components/NewApplication";
 import type { ServiceType } from "../../types/ServiceType";
+import AlreadyApplied from "./components/AlreadyApplied";
 
 export default function VehicleDetails() {
     const [vehicle, setVehicle] = useState<VehicleType | null>(null);
@@ -17,6 +18,7 @@ export default function VehicleDetails() {
     const location = useLocation();
     const navigate = useNavigate();
     const user = useStore((state: any) => state.user);
+    const [alreadyApplied, setAlreadyApplied] = useState(false);
     
     const fetchVehicleDetails = async (id: number) => {
         setLoading(true);
@@ -51,10 +53,31 @@ export default function VehicleDetails() {
         }
     }
 
+    const checkIfApplied = async () => {
+        try {
+            const response = await fetch(`/api/applications`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${user?.token}`
+                }
+            });
+            if (!response.ok) {
+                throw new Error("Failed to check if already applied");
+            }
+            const data = await response.json();
+            if (data.items.find((application: any) => application.vehicleId === currentVehicleId)) {
+                setAlreadyApplied(true);
+            }
+        } catch (err: any) {
+            console.error(err.message);
+        }
+    }
+
     useEffect(() => {
         const getVehiclesAndServices = async () => {
             await fetchVehicleDetails(currentVehicleId);
             if(user?.roles.includes("Customer")) {
+                await checkIfApplied();
                 await fetchAvailableServices();
             }
         }
@@ -106,13 +129,19 @@ export default function VehicleDetails() {
                     </div>
                     {/* display application option for customer only */}
                     {(user?.roles.includes("Customer") || !user) && (
-                        <NewApplication 
-                            listingType={vehicle.listingType} 
-                            availableServices={availableServices} 
-                            selectedServices={selectedServices} 
-                            onCheckboxChange={onCheckboxChange} 
-                            onInitiateApplication={onInitiateApplication}
-                        />
+                        <>
+                            {alreadyApplied ? (
+                                <AlreadyApplied />
+                            ) : (
+                                <NewApplication 
+                                    listingType={vehicle.listingType} 
+                                    availableServices={availableServices} 
+                                    selectedServices={selectedServices} 
+                                    onCheckboxChange={onCheckboxChange} 
+                                    onInitiateApplication={onInitiateApplication}
+                                />
+                            )}
+                        </>
                     )}
                 </div>
                 <Badge variant="outline" className="w-fit text-lg p-5 bg-blue-100 border-blue-300">

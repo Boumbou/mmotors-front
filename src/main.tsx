@@ -13,6 +13,7 @@ import About from "./routes/about/Index.tsx"
 import AuthLayout from "./routes/auth/Layout.tsx"
 import VehicleDetails from "./routes/vehicleDetails/Index.tsx"
 import Application from "./routes/application/Index.tsx"
+import VehicleSettings from "./routes/vehicleDetails/VehicleSettings.tsx"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -37,6 +38,8 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/catalogue" element={<Layout />} >
             <Route index element={<Vehicles />} />
             <Route path="vehicle/:id" element={<VehicleDetails />} />
+            <Route path="vehicle/:id/edition" element={<VehicleSettings />} />
+            <Route path="vehicle/nouveau" element={<VehicleSettings />} />
             {/* <Route  path="locations" element={<Vehicles />} /> */}
           </Route>
 

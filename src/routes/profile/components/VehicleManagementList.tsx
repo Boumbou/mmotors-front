@@ -4,6 +4,7 @@ import ManagementTable from "./VehicleTable";
 import { Button } from "@/components/ui/button";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Add } from "@hugeicons/core-free-icons";
+import { Link } from "react-router";
 
 export default function VehicleManagementList() {
     const [vehicles, setVehicles] = useState<VehicleType[]>([]);
@@ -42,10 +43,12 @@ export default function VehicleManagementList() {
 
     return (
         <>
-            <Button variant="outline" className="mb-4">
-                <HugeiconsIcon icon={Add} className="mr-2"/>
-                Ajouter un véhicule
-            </Button>
+            <Link to="/catalogue/vehicle/nouveau">
+                <Button variant="outline" className="mb-4">
+                    <HugeiconsIcon icon={Add} className="mr-2"/>
+                    Ajouter un véhicule
+                </Button>
+            </Link>
             <ManagementTable vehicles={vehicles} columns={columns} />
         </>
     );
