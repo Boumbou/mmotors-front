@@ -1,26 +1,29 @@
 import {Card, CardAction, CardContent, CardHeader, CardTitle} from "../../../components/ui/card";
 import {HugeiconsIcon} from "@hugeicons/react";
-import { Car, File01Icon, Money, Next, Trash2, ValidationApprovalIcon} from "@hugeicons/core-free-icons";
+import { Car, Car01Icon, File01Icon, Money, Next, Send, Trash2, ValidationApprovalIcon} from "@hugeicons/core-free-icons";
 import {Separator} from "../../../components/ui/separator";
 import {Button} from "../../../components/ui/button";
 import type { VehicleType } from "@/types/VehicleType";
-import { ApplicationStatusMap, type ApplicationType } from "@/types/ApplicationType";
+import { ApplicationStatus, ApplicationStatusMap, type ApplicationType } from "@/types/ApplicationType";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import useStore from "@/routes/auth/userStore";
 import { Link, useNavigate } from "react-router";
-import type { JSX } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
+import { useState, type JSX } from "react";
+import checkIsStaff from "@/helpers/checkUserRole";
+import { Skeleton } from "@/components/ui/skeleton";
+import { DeleteDialog } from "@/components/DeleteDialog";
 
 export default function ApplicationManagement(
-    { vehicle, application, totalOverhead, motorizationLabels }:
-    { vehicle: VehicleType, application: ApplicationType, totalOverhead: number, motorizationLabels: any }
+    { vehicle, application, motorizationLabels }:
+    { vehicle: VehicleType, application: ApplicationType, motorizationLabels: any }
 ) {
 
     const user = useStore((state: any) => state.user);
-    const isStaff = user.roles.includes("Staff") || user.roles.includes("Admin");
+    const isStaff = checkIsStaff(user);
     const navigate= useNavigate();
-
+    const [loading, setLoading] = useState(false);
+    const [status, setStatus] = useState(ApplicationStatusMap[application.status]);
     const OnDeleteApplication = async () => {
         //call api
         await fetch(`/api/applications/${application.id}`, {
@@ -45,7 +48,26 @@ export default function ApplicationManagement(
         <Button variant="destructive" className="text-sm font-light" >
             <HugeiconsIcon icon={Trash2} className="w-5 h-5 mr-2" />
                 Supprimer le dossier
-        </Button>)
+        </Button>
+    )
+
+    const onSubmit = async () => {
+        setLoading(true);
+        await fetch(`/api/applications/${application.id}/submit`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${user.token}`
+            }
+        }).catch((error) => {
+            toast.error("Une erreur est survenue lors de la soumission du dossier. Veuillez réessayer.");
+            throw error;
+        }).finally(() => {
+            setLoading(false);
+        });
+        setStatus(ApplicationStatusMap[ApplicationStatus.Submitted]);
+        toast.success("Dossier soumis avec succès");
+    }
 
     return (
         <>
@@ -63,49 +85,25 @@ export default function ApplicationManagement(
                         </div>
                         {
                             !isStaff && application.status === 0 && (
-                                <Dialog>
-                                    <DialogTrigger>
-                                        <DeleteApplicationButton/>
-                                    </DialogTrigger>
-                                    <DialogContent className="bg-red-100">
-                                        <DialogHeader>
-                                            Êtes-vous sûr de vouloir supprimer votre dossier ?
-                                        </DialogHeader>
-                                        <DialogDescription >
-                                            Cette action est irréversible et supprimera toutes les données associées à votre dossier de candidature.
-                                        </DialogDescription>
-                                        <DialogFooter >
-                                            <Button variant="destructive" className="text-sm" onClick={OnDeleteApplication}>
-                                                <HugeiconsIcon icon={Trash2} className="w-5 h-5 mr-2" />
-                                                Confirmer la suppression
-                                            </Button>
-                                        </DialogFooter>
-                                    </DialogContent>
-                                </Dialog>
+                                <DeleteDialog
+                                    header="Êtes-vous sûr de vouloir supprimer votre dossier ?"
+                                    description="Cette action est irréversible et supprimera toutes les données associées à votre dossier."
+                                    OnDeleteApplication={OnDeleteApplication}
+                                >
+                                    <DeleteApplicationButton />
+                                </DeleteDialog>
                             )
                         }
                         
                         {
                             isStaff && application.status > 0 && (
-                                <Dialog>
-                                    <DialogTrigger>
-                                        <DeleteApplicationButton />
-                                    </DialogTrigger>
-                                    <DialogContent className="bg-red-100">
-                                        <DialogHeader>
-                                            Êtes-vous sûr de vouloir supprimer ce dossier ?
-                                        </DialogHeader>
-                                        <DialogDescription >
-                                            Cette action est irréversible et supprimera le dossier client, ainsi que toutes les données associées.
-                                        </DialogDescription>
-                                        <DialogFooter >
-                                            <Button variant="destructive" className="text-sm" onClick={OnDeleteApplication}>
-                                                <HugeiconsIcon icon={Trash2} className="w-5 h-5 mr-2" />
-                                                Confirmer la suppression
-                                            </Button>
-                                        </DialogFooter>
-                                    </DialogContent>
-                                </Dialog>
+                                <DeleteDialog
+                                    header="Êtes-vous sûr de vouloir supprimer ce dossier ?"
+                                    description="Cette action est irréversible et supprimera toutes les données associées à ce dossier."
+                                    OnDeleteApplication={OnDeleteApplication}
+                                >
+                                    <DeleteApplicationButton />
+                                </DeleteDialog>
                             )
                         }    
                     </div>
@@ -115,25 +113,32 @@ export default function ApplicationManagement(
                         <p className="text-md">{vehicle.listingType === 0 ? "Achat immédiat" : `Location ${vehicle.rentalTermMonths} mois`}</p>
                     </div>
                     <Separator orientation="horizontal" className="mx-2" />
+                    <div className="flex flex-col items-start gap-2">
+                        <p className="text-lg font-medium">Montant de base :</p>
+                            <div className="flex flex-row items-start gap-2">
+                                <HugeiconsIcon icon={Car01Icon} className="w-5 h-5 text-slate-500" />
+                                <p className="text-md font-md text-gray-800"> {vehicle.listingType === 0 ? `${vehicle.listedAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: true })} €` : `${vehicle.listedAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: true })} €`}</p>
+                            </div>
+                    </div>
                     {application.applicationServices.length > 0 && (
                         <div className="flex flex-col items-start gap-2">
                             <p className="text-lg font-medium">Services sélectionnés :</p>
                             {application.applicationServices.map((service) => (
                                 <div key={service.serviceId} className="flex flex-row items-start gap-2">
                                     <HugeiconsIcon icon={Money} className="w-5 h-5 text-slate-300" />
-                                    <p className="text-md">service : {service.appliedOverheadType === 0 ? `${service.appliedOverheadValue}%` : `${service.appliedOverheadValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: true })}€`}</p>
+                                    <p className="text-md">service : {service.appliedOverheadType === 0 ? `${service.appliedOverheadValue*100} %` : `${service.appliedOverheadValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: true })}€`}</p>
                                 </div>
                             ))}
                         </div>
                     )}
                     <div className="flex flex-row items-start gap-2">
                         <HugeiconsIcon icon={Money} className="w-6 h-6 text-yellow-500" />
-                        <p className="text-lg max-w-25 min-w-20">{(vehicle.listedAmount + totalOverhead).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: true })}€</p>
+                        <p className="text-lg max-w-25 min-w-20">{(application.totalAmount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: true })}€</p>
                     </div>
                 </CardContent>
                 <CardAction className="w-full flex flex-row gap-5 items-center px-5">
-                    <Badge variant="default" className={`text-md max-h-2 font-light p-4 text-${ApplicationStatusMap[application.status].color}-800 bg-${ApplicationStatusMap[application.status].color}-100 border-${ApplicationStatusMap[application.status].color}-300`}>
-                        {ApplicationStatusMap[application.status].label}
+                    <Badge variant="default" className={`text-md max-h-2 font-light p-4 text-${status.color}-800 bg-${status.color}-100 border-${status.color}-300`}>
+                        {status.label}
                     </Badge>
                     {
                         isStaff  && (
@@ -195,6 +200,16 @@ export default function ApplicationManagement(
                     ))}
                 </CardContent>
             </Card> 
+            {
+                !isStaff && ApplicationStatusMap[application.status].label === "Brouillon" && (
+                    // disabled={application.documents.some((doc: any) => !doc.url)}
+                    !loading ? (<Button  variant="default" className="w-full max-w-2xl  h-10 text-sm mt-5" onClick={onSubmit}>
+                        <HugeiconsIcon icon={Send} className="w-5 h-5 mr-2" />
+                        Soumettre mon dossier
+                    </Button>) :
+                    <Skeleton className="w-full max-w-2xl h-10 mt-5" />
+                )
+            }
         </>
                 
     )

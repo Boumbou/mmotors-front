@@ -23,16 +23,15 @@ export default function Dashboard(
 
     return (
         <div className="flex min-h-svh w-full">
-            <div className="flex min-w-0  w-full flex-col gap-4 text-sm leading-loose">
-                <div>
-                    <h1 className="font-medium">Tableau de bord</h1>
-                    <p>Vous avez {numberOfApplications} dossiers en cours</p>
+            <div className="flex min-w-0  w-full flex-col gap-6 text-sm leading-loose">
+                    <h1 className="text-lg font-medium">Bonjour {user.name}</h1>
+                    <p className="text-md">Vous avez {numberOfApplications} dossiers en cours</p>
                     <div className="flex flex-row gap-4">
                             <ChartPieDonutText data={applications} title="Répartition des dossiers" />
                             <BarChartDefault data={applications} title="Nombre de dossiers par mois" />
                     </div>
                     <div className="mt-4">
-                        <Card className="rounded-lg shadow-md p-4">
+                        <Card className="rounded-lg bg-gray-100 shadow-md p-4">
                             <CardHeader>
                                 <CardTitle>Bienvenue sur votre tableau de bord</CardTitle>
                             </CardHeader>
@@ -40,13 +39,11 @@ export default function Dashboard(
                                 {/* ajoute un super icon du genre tips du jour */}
                                 <div className="flex items-center gap-2 mb-2">
                                     <span className="text-2xl">💡</span>
-                                    <p className="font-medium">Astuce du jour</p>
+                                    <p className="font-medium">Contrôlez ici les tendances pour mieux gérer votre activité</p>
                                 </div>
-                                <p>Suivez l'évolution de vos dossiers et ne soyez jamais pris au dépourvu.</p>
                             </CardContent>
                         </Card>
                     </div>
-                </div>
             </div>
         </div>
     )

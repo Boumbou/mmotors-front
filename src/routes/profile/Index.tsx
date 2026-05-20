@@ -9,6 +9,7 @@ import type { ApplicationType } from "@/types/ApplicationType";
 import CustomerApplicationList from "./components/CustomerApplicationList";
 import Dashboard from "./components/Dashboard";
 import VehicleManagementList from "./components/VehicleManagementList";
+import checkIsStaff from "@/helpers/checkUserRole";
 
 export default function Profile() {
     const navigate = useNavigate();
@@ -16,9 +17,10 @@ export default function Profile() {
     //fetch userid from userStore
     const user: User | null = useStore((state: any) => state.user)
     const sections: SideBarSectionType[] | undefined = user ? sidebarData[user.roles[0].toLowerCase()] : undefined;
-    const [selectedSection, setSelectedSection] = useState<string>(location.state?.section || "profile");
     const [applications, setApplications] = useState<ApplicationType[]>([]);
     const [numberOfApplications, setNumberOfApplications] = useState(0);
+    const isStaff = checkIsStaff(user);
+    const [selectedSection, setSelectedSection] = useState<string>(location.state?.section || (isStaff ? "dashboard" : "profile"));
     
     if (!user) {
         navigate("/auth/login");
@@ -59,7 +61,7 @@ export default function Profile() {
 
     return (
         <>
-            <Tabs defaultValue="profile" value={selectedSection} className="self-center max-w-2xl w-full">
+            <Tabs defaultValue={isStaff ? "dashboard" : "profile"} value={selectedSection} className="self-center max-w-2xl w-full">
                 <TabsList className="bg-slate-200 p-2 rounded-md mb-4">
                     {sections?.map((section) => (
                         <TabsTrigger onClick={()=>handleSectionChange(section.value)} key={section.value} value={section.value} className="px-4 py-2 rounded-md data-[state=active]:bg-slate-300">

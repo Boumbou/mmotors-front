@@ -11,6 +11,7 @@ import ApplicationCreation from "./components/ApplicationCreation";
 import ApplicationManagement from "./components/ApplicationManagement";
 import type { User } from "@/types/UserType";
 import NoResult from "@/components/NoResult";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Application() {
     const applicationId = parseInt(window.location.pathname.split("/").pop() || "0");
@@ -20,7 +21,6 @@ export default function Application() {
     const history = window.history;
     const [vehicle, setVehicle] = useState<VehicleType | null>( location.state?.vehicle || null);
     const services: ServiceType[] = location.state?.services || [];
-    const [appliedServices, setAppliedServices] = useState([]);
     const [loading, setLoading] = useState(true);
     const [application, setApplication] = useState<ApplicationType | null>(null);
     const [totalOverhead, setTotalOverhead] = useState(0);
@@ -40,8 +40,11 @@ export default function Application() {
                 setError("Aucun véhicule sélectionné pour ce dossier");
             }
         };
+
         fetchData();
         setLoading(false);
+            
+
     }, []);
 
     const fetchApplicationDetails = async (id:number) => {
@@ -58,7 +61,6 @@ export default function Application() {
             }
             const data = await response.json();
             setApplication(data);
-            setAppliedServices(data.applicationServices);
             setVehicle(data.vehicle);
             setTotalOverhead(calculateTotalOverhead());
             setLoading(false);
@@ -85,6 +87,7 @@ export default function Application() {
         if (!effectiveServices || effectiveServices.length === 0) return 0;
 
         if (!vehicle) return 0;
+        
         const total = effectiveServices.reduce((acc:number, service: any) => {
             const overhead = application ? service.calculatedOverheadAmount : calculateOverhead(service);
             return acc + overhead;
@@ -169,15 +172,22 @@ export default function Application() {
             </Breadcrumb>
 
 
-            {error ? (
-                <NoResult />
-            ) : loading ? 
-                (<p>Loading...</p>)
+            {
+                error ? 
+                (
+                    <NoResult />
+                ) : loading ? 
+                (
+                    <div className="w-full max-w-2xl p-6">
+                        <Skeleton className="w-full bg-slate-200 h-80 mb-5" />
+                        <Skeleton className="w-full bg-slate-200 h-40" />
+                    </div>
+                )
                 :(
                     <>
                         { !applicationId &&<ApplicationCreation vehicle={vehicle!} services={services} totalOverhead={totalOverhead} calculateOverhead={calculateOverhead} onCreateApplication={onCreateApplication} />}
             
-                        { application &&<ApplicationManagement vehicle={vehicle!} application={application!} totalOverhead={calculateTotalOverhead()} motorizationLabels={motorizationLabels} />}
+                        { application &&<ApplicationManagement vehicle={vehicle!} application={application!} motorizationLabels={motorizationLabels} />}
                     </>
                 )
             }
