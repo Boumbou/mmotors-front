@@ -1,6 +1,6 @@
 import {Card, CardAction, CardContent, CardHeader, CardTitle} from "../../../components/ui/card";
 import {HugeiconsIcon} from "@hugeicons/react";
-import { Car, Car01Icon, File01Icon, Money, Next, Send, Trash2, ValidationApprovalIcon} from "@hugeicons/core-free-icons";
+import { Car, Car01Icon, CheckCircle, Close, File01Icon, Mail, Money, Pause, Send, Trash2, ValidationApprovalIcon} from "@hugeicons/core-free-icons";
 import {Separator} from "../../../components/ui/separator";
 import {Button} from "../../../components/ui/button";
 import type { VehicleType } from "@/types/VehicleType";
@@ -13,13 +13,14 @@ import { useState, type JSX } from "react";
 import checkIsStaff from "@/helpers/checkUserRole";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DeleteDialog } from "@/components/DeleteDialog";
+import type { User } from "@/types/UserType";
 
 export default function ApplicationManagement(
     { vehicle, application, motorizationLabels }:
     { vehicle: VehicleType, application: ApplicationType, motorizationLabels: any }
 ) {
 
-    const user = useStore((state: any) => state.user);
+    const user: User = useStore((state: any) => state.user);
     const isStaff = checkIsStaff(user);
     const navigate= useNavigate();
     const [loading, setLoading] = useState(false);
@@ -69,6 +70,24 @@ export default function ApplicationManagement(
         toast.success("Dossier soumis avec succès");
     }
 
+    const onHold = async () => {
+        setLoading(true);
+        await fetch(`/api/applications/${application.id}/hold`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${user.token}`
+            }
+        }).catch((error) => {
+            toast.error(error.message || "Une erreur est survenue lors de la mise en attente du dossier. Veuillez réessayer.");
+            throw error;
+        }).finally(() => {
+            setLoading(false);
+        });
+        setStatus(ApplicationStatusMap[ApplicationStatus.OnHold]);
+        toast.success("Dossier mis en attente avec succès");
+    }
+
     return (
         <>
             {/* Vehicle and conditions */}
@@ -84,7 +103,7 @@ export default function ApplicationManagement(
 
                         </div>
                         {
-                            !isStaff && application.status === 0 && (
+                            !isStaff && ["Brouillon","En attente"].includes(status.label) && (
                                 <DeleteDialog
                                     header="Êtes-vous sûr de vouloir supprimer votre dossier ?"
                                     description="Cette action est irréversible et supprimera toutes les données associées à votre dossier."
@@ -96,7 +115,7 @@ export default function ApplicationManagement(
                         }
                         
                         {
-                            isStaff && application.status > 0 && (
+                            isStaff && !(["Brouillon","En attente"].includes(status.label)) && (
                                 <DeleteDialog
                                     header="Êtes-vous sûr de vouloir supprimer ce dossier ?"
                                     description="Cette action est irréversible et supprimera toutes les données associées à ce dossier."
@@ -136,19 +155,24 @@ export default function ApplicationManagement(
                         <p className="text-lg max-w-25 min-w-20">{(application.totalAmount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: true })}€</p>
                     </div>
                 </CardContent>
-                <CardAction className="w-full flex flex-row gap-5 items-center px-5">
+                <CardAction className="w-full flex flex-wrap flex-row gap-5 items-center px-5">
                     <Badge variant="default" className={`text-md max-h-2 font-light p-4 text-${status.color}-800 bg-${status.color}-100 border-${status.color}-300`}>
                         {status.label}
                     </Badge>
                     {
                         isStaff  && (
                             <>
-                                <Button disabled={application.status < 2} variant="default" className="text-sm p-4 font-light bg-green-300 text-green-800" onClick={() => toast("Fonctionnalité de suppression à venir")}>
-                                    <HugeiconsIcon icon={Next} className="w-5 h-5 mr-2" />
+                                <Separator orientation="vertical" className="mx-2" />
+                                <Button disabled={status.label != ApplicationStatusMap[ApplicationStatus.Submitted].label} variant="default" className="w-auto text-sm p-4 font-light bg-orange-200 text-orange-800" onClick={onHold}>
+                                    <HugeiconsIcon icon={Pause} className="w-5 h-5 mr-2" />
+                                    Mettre en attente
+                                </Button>
+                                <Button disabled={status.label != ApplicationStatusMap[ApplicationStatus.Submitted].label} variant="default" className="w-auto text-sm p-4 font-light bg-green-300 text-green-800" onClick={() => toast("Fonctionnalité de suppression à venir")}>
+                                    <HugeiconsIcon icon={CheckCircle} className="w-5 h-5 mr-2" />
                                     Approuver
                                 </Button>
-                                <Button disabled={application.status < 2} variant="destructive" className="text-sm p-4 font-light bg-red-300 text-red-800" onClick={() => toast("Fonctionnalité de suppression à venir")}>
-                                    <HugeiconsIcon icon={Next} className="w-5 h-5 mr-2" />
+                                <Button disabled={status.label != ApplicationStatusMap[ApplicationStatus.Submitted].label} variant="destructive" className="w-auto text-sm p-4 font-light bg-red-300 text-red-800" onClick={() => toast("Fonctionnalité de suppression à venir")}>
+                                    <HugeiconsIcon icon={Close} className="w-5 h-5 mr-2" />
                                     Rejeter
                                 </Button>
                             </>
@@ -168,7 +192,10 @@ export default function ApplicationManagement(
                     <div className="flex flex-row justify-between gap-5">
                         <div className="flex flex-col gap-1">
                             <p className="text-lg font-medium">{application.customer.name} {application.customer.lastName}</p>
-                            <Link to={`mailto:${application.customer.email}`} className="text-md font-light">Email : {application.customer.email}</Link>
+                            <Link to={`mailto:${application.customer.email}`} className="text-md font-light">
+                                <HugeiconsIcon icon={Mail} className="w-5 h-5 mr-2 inline" /> 
+                                {application.customer.email}
+                            </Link>
                         </div>
                     </div>
                 </CardContent>
@@ -194,14 +221,17 @@ export default function ApplicationManagement(
                                     Voir le document
                                 </a>
                             ) : (
-                                <Button variant="outline" className="text-sm" onClick={() => toast("Fonctionnalité d'upload à venir")}>Uploader le document</Button>
+                                !isStaff ? (<Button variant="outline" className="text-sm" onClick={() => toast("Fonctionnalité d'upload à venir")}>Uploader le document</Button>)
+                                : (<Badge variant="destructive" className="text-sm font-light p-2">Document manquant</Badge>)
                             )}
                         </div>
                     ))}
                 </CardContent>
             </Card> 
+            
+             {/* If user is not staff and application status is draft, display a button to submit the application */}
             {
-                !isStaff && ApplicationStatusMap[application.status].label === "Brouillon" && (
+                !isStaff && ["Brouillon","En attente"].includes(status.label) && (
                     // disabled={application.documents.some((doc: any) => !doc.url)}
                     !loading ? (<Button  variant="default" className="w-full max-w-2xl  h-10 text-sm mt-5" onClick={onSubmit}>
                         <HugeiconsIcon icon={Send} className="w-5 h-5 mr-2" />
