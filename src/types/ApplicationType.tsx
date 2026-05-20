@@ -7,6 +7,7 @@ export type ApplicationType = {
     documents: Array<{}>
     id: number
     reviewedByUserId: string | null
+    rejectionReason: string
     status: ApplicationStatus
     totalAmount: number
     updatedAt: string

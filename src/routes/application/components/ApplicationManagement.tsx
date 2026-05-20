@@ -1,6 +1,6 @@
 import {Card, CardAction, CardContent, CardHeader, CardTitle} from "../../../components/ui/card";
 import {HugeiconsIcon} from "@hugeicons/react";
-import { Car, Car01Icon, CheckCircle, Close, File01Icon, Mail, Money, Pause, Send, Trash2, ValidationApprovalIcon} from "@hugeicons/core-free-icons";
+import { Car, Car01Icon, Check, CheckCircle, Close, File01Icon, Mail, Money, Pause, Send, Trash2, ValidationApprovalIcon} from "@hugeicons/core-free-icons";
 import {Separator} from "../../../components/ui/separator";
 import {Button} from "../../../components/ui/button";
 import type { VehicleType } from "@/types/VehicleType";
@@ -14,6 +14,7 @@ import checkIsStaff from "@/helpers/checkUserRole";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DeleteDialog } from "@/components/DeleteDialog";
 import type { User } from "@/types/UserType";
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
 
 export default function ApplicationManagement(
     { vehicle, application, motorizationLabels }:
@@ -25,6 +26,9 @@ export default function ApplicationManagement(
     const navigate= useNavigate();
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState(ApplicationStatusMap[application.status]);
+    const [rejectionReason, setRejectionReason] = useState<string>(application.rejectionReason);
+
+
     const OnDeleteApplication = async () => {
         //call api
         await fetch(`/api/applications/${application.id}`, {
@@ -86,6 +90,51 @@ export default function ApplicationManagement(
         });
         setStatus(ApplicationStatusMap[ApplicationStatus.OnHold]);
         toast.success("Dossier mis en attente avec succès");
+    }
+
+    const reviewApplication = async (decision: {ApplicationId: number, IsApproved: boolean, RejectionReason: string | null}) => {
+        setLoading(true);
+        await fetch(`/api/applications/${application.id}/review`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${user.token}`
+            },
+            body: JSON.stringify(decision)
+        }).catch((error) => {
+            toast.error(error.message || "Une erreur est survenue lors de la revue du dossier. Veuillez réessayer.");
+            throw error;
+        }).finally(() => {
+            setLoading(false);
+        });
+        setStatus(ApplicationStatusMap[decision.IsApproved ? ApplicationStatus.Approved : ApplicationStatus.Rejected]);
+        toast.success("Dossier revu avec succès");
+    }
+
+    const onApprove = async () => {
+        setLoading(true);
+        const decision = {
+            ApplicationId : application.id,
+            IsApproved : true,
+            RejectionReason : null
+        }
+
+        reviewApplication(decision);
+    }
+
+    const onReject = async () => {
+        setLoading(true);
+        const decision = {
+            ApplicationId : application.id,
+            IsApproved : false,
+            RejectionReason : rejectionReason
+        }
+
+        reviewApplication(decision);
+    }
+
+    const handleRejectionReasonChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setRejectionReason(event.target.value);
     }
 
     return (
@@ -167,14 +216,32 @@ export default function ApplicationManagement(
                                     <HugeiconsIcon icon={Pause} className="w-5 h-5 mr-2" />
                                     Mettre en attente
                                 </Button>
-                                <Button disabled={status.label != ApplicationStatusMap[ApplicationStatus.Submitted].label} variant="default" className="w-auto text-sm p-4 font-light bg-green-300 text-green-800" onClick={() => toast("Fonctionnalité de suppression à venir")}>
+                                <Button disabled={status.label != ApplicationStatusMap[ApplicationStatus.Submitted].label} variant="default" className="w-auto text-sm p-4 font-light bg-green-300 text-green-800" onClick={onApprove}>
                                     <HugeiconsIcon icon={CheckCircle} className="w-5 h-5 mr-2" />
                                     Approuver
                                 </Button>
-                                <Button disabled={status.label != ApplicationStatusMap[ApplicationStatus.Submitted].label} variant="destructive" className="w-auto text-sm p-4 font-light bg-red-300 text-red-800" onClick={() => toast("Fonctionnalité de suppression à venir")}>
-                                    <HugeiconsIcon icon={Close} className="w-5 h-5 mr-2" />
-                                    Rejeter
-                                </Button>
+                                <Dialog>
+                                    <DialogTrigger disabled={status.label != ApplicationStatusMap[ApplicationStatus.Submitted].label} asChild>
+                                        <Button variant="destructive"  className="w-auto text-sm p-4 font-light">
+                                            <HugeiconsIcon icon={Close} className="w-5 h-5 mr-2" />
+                                            Rejeter
+                                        </Button>
+                                    </DialogTrigger>
+                                     {/* Dialog content to enter rejection reason */}
+                                     <DialogContent className="sm:max-w-[425px]">
+                                        <DialogHeader>
+                                            <h2 className="text-lg font-medium">Rejeter le dossier ?</h2>
+                                        </DialogHeader>
+                                        <div className="flex flex-col gap-5">
+                                            <p className="text-md font-medium">Saisissez la raison du rejet :</p>
+                                            <textarea disabled={status.label == ApplicationStatusMap[ApplicationStatus.Rejected].label} value={rejectionReason} onChange={handleRejectionReasonChange} placeholder="Entrez la raison du rejet ici..." className="w-full h-32 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-300" />
+                                            <Button disabled={!rejectionReason || status.label == ApplicationStatusMap[ApplicationStatus.Rejected].label} variant="destructive" className="w-auto text-sm p-4 font-light bg-red-300 text-red-800" onClick={onReject}>
+                                                <HugeiconsIcon icon={Close} className="w-5 h-5 mr-2" />
+                                                Rejeter
+                                            </Button>
+                                        </div>
+                                     </DialogContent>
+                                </Dialog>
                             </>
                         )
                     }
@@ -202,6 +269,33 @@ export default function ApplicationManagement(
             </Card>
 
             {/* Documents section */}
+
+            {status.label === ApplicationStatusMap[ApplicationStatus.Rejected].label && (
+                <Card className="w-full max-w-2xl mt-5 bg-red-100 border border-red-300">
+                    <CardContent className="flex flex-col justify-start gap-5">
+                        <div className="flex flex-row items-start gap-2">
+                            <HugeiconsIcon icon={Close} className="w-6 h-6 text-red-500" />
+                            <div className="flex flex-col gap-2">
+                                <p className="text-lg font-medium">Dossier rejeté</p>
+                                <p className="text-md font-light">Raison du rejet : {rejectionReason}</p>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+            )}
+            {status.label === ApplicationStatusMap[ApplicationStatus.Approved].label && (
+                <Card className="w-full max-w-2xl mt-5 bg-green-100 border border-green-300">
+                    <CardContent className="flex flex-col justify-start gap-5">
+                        <div className="flex flex-row items-start gap-2">
+                            🎉
+                            <div className="flex flex-col gap-2">
+                                <p className="text-lg font-medium">Dossier approuvé</p>
+                                <p className="text-md font-light">Félicitations! Toutes les conditions ont été remplies. Nous vous contacterons très prochainement pour la suite</p>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+            )}
             <Card className="w-full max-w-2xl mt-5 bg-white">
                 <CardHeader>
                     <CardTitle>
@@ -213,15 +307,18 @@ export default function ApplicationManagement(
                         <div key={document.id} className="flex flex-row justify-between items-center gap-5">
                             <p className="text-lg">{document.fileName}</p>
                             {/* if document.url is not null, display a link to the document, otherwise display an upload button */}
-                            {document.url ? (
-                                <a href={document.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
-                                    <span>
-                                        <HugeiconsIcon icon={File01Icon} className="w-6 h-6 text-blue-500" />
-                                    </span>
-                                    Voir le document
-                                </a>
-                            ) : (
-                                !isStaff ? (<Button variant="outline" className="text-sm" onClick={() => toast("Fonctionnalité d'upload à venir")}>Uploader le document</Button>)
+                            {
+                                document.url ? (
+                                    <a href={document.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+                                        <span>
+                                            <HugeiconsIcon icon={File01Icon} className="w-6 h-6 text-blue-500" />
+                                        </span>
+                                        Voir le document
+                                    </a>
+                                ) : (
+                                    !isStaff? 
+                                        status.label === ApplicationStatusMap[ApplicationStatus.Draft].label ? (<Button variant="outline" className="text-sm" onClick={() => toast("Fonctionnalité d'upload à venir")}>Uploader le document</Button>):
+                                        (<Badge variant="destructive" className="text-sm font-light p-2">Aucun document partagé</Badge>)
                                 : (<Badge variant="destructive" className="text-sm font-light p-2">Document manquant</Badge>)
                             )}
                         </div>
