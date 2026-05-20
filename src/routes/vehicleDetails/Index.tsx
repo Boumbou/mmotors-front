@@ -17,6 +17,7 @@ export default function VehicleDetails() {
     const location = useLocation();
     const navigate = useNavigate();
     const user = useStore((state: any) => state.user);
+    
     const fetchVehicleDetails = async (id: number) => {
         setLoading(true);
         setError(null);
@@ -29,14 +30,17 @@ export default function VehicleDetails() {
             setVehicle(data);
         } catch (err: any) {
             setError(err.message);
+            throw err;
         } finally {
             setLoading(false);
         }
     }
+    
+    const fetchAvailableServices = async () => {
+        const currentListingType = location.search.search("achats") !== -1 ? 0 : 1;
 
-    const fetchAvailableServices = async (id: number) => {
         try {
-            const response = await fetch(`/api/services?listingType=${id}`);
+            const response = await fetch(`/api/services?listingType=${currentListingType}`);
             if (!response.ok) {
                 throw new Error("Failed to fetch available services");
             }
@@ -48,12 +52,13 @@ export default function VehicleDetails() {
     }
 
     useEffect(() => {
-        fetchVehicleDetails(currentVehicleId);
-        
-        if(user?.roles.includes("Customer")) {
-            fetchAvailableServices(currentVehicleId);
-            
+        const getVehiclesAndServices = async () => {
+            await fetchVehicleDetails(currentVehicleId);
+            if(user?.roles.includes("Customer")) {
+                await fetchAvailableServices();
+            }
         }
+        getVehiclesAndServices();
     }, [currentVehicleId]);
 
     const onCheckboxChange = (serviceId: number) => {

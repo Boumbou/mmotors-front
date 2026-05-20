@@ -28,32 +28,24 @@ export default function Application() {
 
     
     useEffect(() => {
+        setLoading(true);
         const fetchData = async () => {
             // if application id is in the url, fetch application details and set application state
             if (applicationId) {
                 await fetchApplicationDetails(applicationId);
+            }else if (location.state?.vehicle) {
+                setTotalOverhead(calculateTotalOverhead());
+            } else {
+                toast.error("Aucun véhicule sélectionné pour ce dossier", { duration: 2000 });
+                setError("Aucun véhicule sélectionné pour ce dossier");
             }
         };
         fetchData();
+        setLoading(false);
     }, []);
-    
-    // const fetchVehicleDetails = async (id: number) => {
-    //     try {
-    //         const response = await fetch(`/api/vehicles/${id}`);
-    //         if (!response.ok) {
-    //             throw new Error("Failed to fetch vehicle details");
-    //         }
-    //         const data = await response.json();
-    //         setVehicle(data);
-    //         await setTotalOverhead(calculateTotalOverhead());
-    //         setLoading(false);
-    //     } catch (err: any) {
-    //         console.error(err.message);
-    //         toast.error("Erreur lors du chargement des détails du véhicule");
-    //     }
-    // }
 
     const fetchApplicationDetails = async (id:number) => {
+        
         try {
             setError(null);
             const response = await fetch(`/api/applications/${id}`, {
@@ -90,7 +82,6 @@ export default function Application() {
     
     const calculateTotalOverhead = () => {
         const effectiveServices = application ? application.applicationServices : services
-        console.log("Effective services for overhead calculation:", effectiveServices);
         if (!effectiveServices || effectiveServices.length === 0) return 0;
 
         if (!vehicle) return 0;
@@ -184,7 +175,7 @@ export default function Application() {
                 (<p>Loading...</p>)
                 :(
                     <>
-                        { !application &&<ApplicationCreation vehicle={vehicle!} services={services} totalOverhead={totalOverhead} calculateOverhead={calculateOverhead} onCreateApplication={onCreateApplication} />}
+                        { !applicationId &&<ApplicationCreation vehicle={vehicle!} services={services} totalOverhead={totalOverhead} calculateOverhead={calculateOverhead} onCreateApplication={onCreateApplication} />}
             
                         { application &&<ApplicationManagement vehicle={vehicle!} application={application!} totalOverhead={calculateTotalOverhead()} motorizationLabels={motorizationLabels} />}
                     </>
