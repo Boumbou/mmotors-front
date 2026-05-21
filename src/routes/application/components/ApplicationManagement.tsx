@@ -15,6 +15,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { DeleteDialog } from "@/components/DeleteDialog";
 import type { User } from "@/types/UserType";
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 
 export default function ApplicationManagement(
     { vehicle, application, motorizationLabels }:
@@ -92,6 +93,28 @@ export default function ApplicationManagement(
         toast.success("Dossier mis en attente avec succès");
     }
 
+    const onFileChange = (event: React.ChangeEvent<HTMLInputElement>, documentId: number) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        // call api to upload the file for the document with id documentId
+        const formData = new FormData();
+        formData.append("file", file);
+        setLoading(true);
+        fetch(`/api/applications/${application.id}/documents/${documentId}/upload`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${user.token}`
+            },
+            body: formData
+        }).catch((error) => {
+            toast.error("Une erreur est survenue lors du téléchargement du document. Veuillez réessayer.");
+            throw error;
+        }).finally(() => {
+            setLoading(false);
+        });
+        toast.success("Document téléchargé avec succès");
+    }
+
     const reviewApplication = async (decision: {ApplicationId: number, IsApproved: boolean, RejectionReason: string | null}) => {
         setLoading(true);
         await fetch(`/api/applications/${application.id}/review`, {
@@ -142,6 +165,8 @@ export default function ApplicationManagement(
             {/* Vehicle and conditions */}
             <Card className="w-full max-w-2xl mt-5 bg-white">
                 <CardContent className="flex flex-col justify-start gap-5 px-5">
+
+                    {/* header info */}
                     <div className="flex flex-row justify-start gap-5">
                         <HugeiconsIcon icon={Car} className="w-10 h-10 text-gray-500" />
                         <div className="flex flex-col w-full gap-1">
@@ -151,6 +176,8 @@ export default function ApplicationManagement(
                             <span className="text-md font-light">Dossier créé le {new Date(application.createdAt).toLocaleDateString(new Intl.Locale("fr-FR"))}</span>
 
                         </div>
+
+                        {/* delete area */}
                         {
                             !isStaff && ["Brouillon","En attente"].includes(status.label) && (
                                 <DeleteDialog
@@ -176,6 +203,8 @@ export default function ApplicationManagement(
                         }    
                     </div>
                     <Separator orientation="horizontal" className="mx-2" />
+
+                    {/* contract details */}
                     <div className="flex flex-row items-start gap-2">
                         <HugeiconsIcon icon={ValidationApprovalIcon} className="w-6 h-6 text-green-500" />
                         <p className="text-md">{vehicle.listingType === 0 ? "Achat immédiat" : `Location ${vehicle.rentalTermMonths} mois`}</p>
@@ -204,6 +233,8 @@ export default function ApplicationManagement(
                         <p className="text-lg max-w-25 min-w-20">{(application.totalAmount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: true })}€</p>
                     </div>
                 </CardContent>
+
+                {/* workflow actions */}
                 <CardAction className="w-full flex flex-wrap flex-row gap-5 items-center px-5">
                     <Badge variant="default" className={`text-md max-h-2 font-light p-4 text-${status.color}-800 bg-${status.color}-100 border-${status.color}-300`}>
                         {status.label}
@@ -268,7 +299,7 @@ export default function ApplicationManagement(
                 </CardContent>
             </Card>
 
-            {/* Documents section */}
+            {/* result section */}
 
             {status.label === ApplicationStatusMap[ApplicationStatus.Rejected].label && (
                 <Card className="w-full max-w-2xl mt-5 bg-red-100 border border-red-300">
@@ -283,6 +314,7 @@ export default function ApplicationManagement(
                     </CardContent>
                 </Card>
             )}
+
             {status.label === ApplicationStatusMap[ApplicationStatus.Approved].label && (
                 <Card className="w-full max-w-2xl mt-5 bg-green-100 border border-green-300">
                     <CardContent className="flex flex-col justify-start gap-5">
@@ -296,6 +328,8 @@ export default function ApplicationManagement(
                     </CardContent>
                 </Card>
             )}
+
+            {/* Documents section */}
             <Card className="w-full max-w-2xl mt-5 bg-white">
                 <CardHeader>
                     <CardTitle>
@@ -317,7 +351,18 @@ export default function ApplicationManagement(
                                     </a>
                                 ) : (
                                     !isStaff? 
-                                        status.label === ApplicationStatusMap[ApplicationStatus.Draft].label ? (<Button variant="outline" className="text-sm" onClick={() => toast("Fonctionnalité d'upload à venir")}>Uploader le document</Button>):
+                                        status.label === ApplicationStatusMap[ApplicationStatus.Draft].label ||
+                                        status.label === ApplicationStatusMap[ApplicationStatus.OnHold].label ? 
+                                        (
+                                            <input
+                                                type="file"
+                                                disabled
+                                                id={`upload-${document.id}`}
+                                                className="bg-slate-100 text-slate-500 text-sm rounded-md border border-slate-300 cursor-pointer file:bg-transparent file:border-0 file:text-sm file:font-medium hover:file:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-200 focus:ring-offset-2 disabled:cursor-not-allowed disabled:file:bg-transparent disabled:file:border-0 disabled:file:text-slate-300"
+                                                onChange={(event) => onFileChange(event, document.id)}
+                                                placeholder={`Charger votre ${document.fileName}`}
+                                            />
+                                        ):
                                         (<Badge variant="destructive" className="text-sm font-light p-2">Aucun document partagé</Badge>)
                                 : (<Badge variant="destructive" className="text-sm font-light p-2">Document manquant</Badge>)
                             )}

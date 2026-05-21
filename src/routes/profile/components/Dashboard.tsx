@@ -5,12 +5,13 @@ import { useNavigate } from "react-router";
 import type { ApplicationType } from "@/types/ApplicationType";
 import BarChartDefault from "@/routes/profile/components/BarChart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { PagedResult } from "@/types/PagedResult";
 
 export default function Dashboard(
-    {applications, numberOfApplications}: 
+    {applications, pagedResult}: 
     {
         applications: ApplicationType[], 
-        numberOfApplications: number, 
+        pagedResult: PagedResult, 
     }
 ) {
     const navigate = useNavigate();
@@ -25,7 +26,7 @@ export default function Dashboard(
         <div className="flex min-h-svh w-full">
             <div className="flex min-w-0  w-full flex-col gap-6 text-sm leading-loose">
                     <h1 className="text-lg font-medium">Bonjour {user.name}</h1>
-                    <p className="text-md">Vous avez {numberOfApplications} dossiers en cours</p>
+                    <p className="text-md">Vous avez {pagedResult.totalCount} dossiers en cours</p>
                     <div className="flex flex-row gap-4">
                             <ChartPieDonutText data={applications} title="Répartition des dossiers" />
                             <BarChartDefault data={applications} title="Nombre de dossiers par mois" />

@@ -24,3 +24,9 @@ README.react.md
 *.njsproj
 *.sln
 *.sw?
+# Optional npm cache directory
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

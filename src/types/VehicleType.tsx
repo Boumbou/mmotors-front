@@ -4,20 +4,8 @@
     * it is also used in the vehicle form page
 */
 
-/*
-    public int Id { get; set; }
-    public string Brand { get; set; }
-    public string Model { get; set; }
-    public int Year { get; set; }
-    public Motorization Motorization { get; set; }
-    public int Mileage { get; set; }
-    public decimal ListedAmount { get; set; }
-    public RentalTerm? RentalTermMonths { get; set; } // Nullable, only for RENTAL
-    public ListingType ListingType { get; set; } // SALE or RENTAL
-    public VehicleStatus Status { get; set; } // AVAILABLE, SOLD, RENTED
-    public string? ImageUrl { get; set; }
-    public string? ImageKey { get; set; }
-*/
+import type { ApplicationType } from "./ApplicationType";
+
 
 export type VehicleListResponse = {
     items: VehicleType[];
@@ -27,7 +15,7 @@ export type VehicleListResponse = {
     totalPages: number;
 }
 
-export type VehicleType = {
+export type VehicleType = Record<string, any> & {
     id: number;
     brand: string;
     model: string;
@@ -40,6 +28,7 @@ export type VehicleType = {
     status: VehicleStatus; // this is an enum
     imageUrl?: string|null; // this is optional because it can be null
     imageKey?: string|null; // this is optional because it can be null
+    applications?: ApplicationType[]; // this is optional because it is only for RENTAL
 }
 
 export const ListingType = {

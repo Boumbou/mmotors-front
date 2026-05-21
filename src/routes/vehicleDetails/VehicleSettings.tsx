@@ -1,17 +1,22 @@
-import { useLocation, useParams } from "react-router";
+import { Link, useLocation, useNavigate, useParams } from "react-router";
 import useStore from "../auth/userStore";
 import Forbidden from "@/components/Foribidden";
 import React, { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { motorizationLabels, vehicleStatusLabels, type VehicleType } from "@/types/VehicleType";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Field, FieldGroup, FieldLabel, FieldTitle } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Save, Trash2 } from "@hugeicons/core-free-icons";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ApplicationStatusMap } from "@/types/ApplicationType";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { DeleteDialog } from "@/components/DeleteDialog";
+import { Badge } from "@/components/ui/badge";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from "@/components/ui/breadcrumb";
 
 
 export default function VehicleSettings() {
@@ -21,6 +26,8 @@ export default function VehicleSettings() {
     const [vehicleDetails, setVehicleDetails] = useState<VehicleType | null>(null);
     const [loading, setLoading] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
+    const [newImageFile, setNewImageFile] = useState<File | null>(null);
 
     if (user?.roles.includes("Customer")) {
         return <Forbidden />;
@@ -56,105 +63,221 @@ export default function VehicleSettings() {
         }
     }
 
+    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0] || null;
+        setNewImageFile(file);
+    };
+
     useEffect(() => {
         if (location.pathname.includes("nouveau")) {
             return;
         }
         setLoading(true);
 
-        setTimeout(() => {
-            fetchVehicleDetails();
-        }, 3000);
+        fetchVehicleDetails();
+        
 
         setLoading(false);
     }, [vehicleId]);
 
+    const onDeleteVehicle = async () => {
+        
+        try {
+
+            await fetch(`/api/vehicles/${vehicleId}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${user?.token}`,
+                },
+            });
+        } catch (error) {
+            toast.error("Erreur lors de la suppression du véhicule");
+            throw new Error("Error deleting vehicle:", { cause: error });
+        }
+
+        toast.success("Véhicule supprimé avec succès");
+        // Optionally, you can redirect the user after deletion
+        navigate("/profile", { state: { section: "vehicles" } });
+    }
+
+    const onCreateOrUpdateVehicle = async () => {
+        // setLoading(true);
+
+        const isCreate = location.pathname.includes("nouveau");
+        const formData = new FormData();
+
+        if(!isCreate){
+            formData.append("Id", String(vehicleDetails?.id));
+            formData.append("ImageKey", String(vehicleDetails?.imageKey));
+        }
+            formData.append("Brand", String(vehicleDetails?.brand));
+            formData.append("Model", String(vehicleDetails?.model));
+            formData.append("Year", String(vehicleDetails?.year));
+            formData.append("Mileage", String(vehicleDetails?.mileage));
+            formData.append("ListedAmount", String(vehicleDetails?.listedAmount));
+            formData.append("Motorization", String(vehicleDetails?.motorization));
+            formData.append("ListingType", String(vehicleDetails?.listingType));
+            formData.append("Status", String(vehicleDetails?.status));
+            formData.append("RentalTermMonths", vehicleDetails?.listingType === 1 ? String(vehicleDetails.rentalTermMonths) : ""); // only include rentalTermMonths if listingType is RENTAL
+        
+        if (newImageFile) {
+            formData.append("image", newImageFile);
+        }
+        
+
+        if (vehicleDetails) {
+            try {
+                const response = await fetch(isCreate ? "/api/vehicles" : `/api/vehicles/${vehicleId}`, {
+                    method: isCreate ? "POST" : "PUT",
+                    headers: {
+                        "Authorization": `Bearer ${user?.token}`,
+                    },
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error("Impossible de sauvegarder les détails du véhicule");
+                }
+                toast.success(`Véhicule ${isCreate ? "créé" : "mis à jour"} avec succès`);
+                // Optionally, you can redirect the user or refresh the vehicle details after saving
+                if (isCreate) {
+                    const createdVehicle = await response.json();
+                    setVehicleDetails(createdVehicle);
+                } else {
+                    fetchVehicleDetails(); // Refresh details after update
+                    
+                }
+            } catch (error) {
+                toast.error(`Erreur lors de la ${isCreate ? "création" : "mise à jour"} du véhicule`);
+                console.error("Error creating/updating vehicle:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+    }
+
     return (
         <>
+            <Breadcrumb className="self-start max-w-2xl w-full mb-4">
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink onClick={() => navigate("/profile", { state: { section: "vehicles" } })}>Retour aux véhicules</BreadcrumbLink>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
+            <Card className="self-center w-full max-w-2xl h-fit pb-10 mb-4 text-slate-500">
             {
-                loading && <Skeleton className="self-center w-full max-w-2xl h-48 bg-slate-300 mb-4" />
+                loading && (
+                    <>
+                        <Skeleton className="self-center w-full max-w-2xl h-48 bg-slate-300 mb-4" />
+                        <Skeleton className="self-center w-full max-w-2xl h-48 bg-slate-300 mb-4" />
+                        <Skeleton className="self-center w-full max-w-2xl h-48 bg-slate-300 mb-4" />
+                        <Skeleton className="self-center w-full max-w-2xl h-48 bg-slate-300 mb-4" />
+                        <Skeleton className="self-center w-full max-w-2xl h-48 bg-slate-300 mb-4" />
+                    </>
+                )
                 
             }
             {
                 (vehicleDetails || location.pathname.includes("nouveau")) && (
-                    <Card className="self-center w-full max-w-2xl h-fit pb-10 mb-4 text-slate-500">
-                        <CardHeader className="flex flex-row justify-between">
+                    <>
+                        
+                        
+                        <CardHeader className="flex flex-row items-center justify-between">
 
                             {vehicleDetails && <h2 className="text-lg font-medium">Paramètres du véhicule # {vehicleDetails.id}</h2> }
                             {!vehicleDetails && <h2 className="text-lg font-medium">Ajouter un nouveau véhicule</h2> }
-                            <div>
-                                <Button className="bg-blue-500 mr-3" variant="default" size="lg" onClick={()=>toast.warning("Feature coming")}>
+                            <div className="flex flex-row items-center gap-2">
+                                <Button className="bg-blue-500 mr-3" variant="default" size="lg" onClick={onCreateOrUpdateVehicle}>
                                     <HugeiconsIcon icon={Save} className="w-4 h-4" />
                                 </Button>
                                 {/* delete button */}
                                 {vehicleDetails?.id && (
-                                     <Button  variant="destructive" size="lg" onClick={()=>toast.warning("Feature coming")}>
-                                        <HugeiconsIcon icon={Trash2} className="w-4 h-4" />
-                                    </Button>
+                                    <DeleteDialog
+                                        header="Supprimer le véhicule"
+                                        description="Êtes-vous sûr de vouloir supprimer ce véhicule ? Cette action est irréversible."
+                                        OnDeleteApplication={onDeleteVehicle}
+                                    >
+                                        <Badge  variant="destructive" className="rounded-lg w-9 h-9 mt-0">
+                                            <HugeiconsIcon icon={Trash2} className="w-4 h-4" />
+                                        </Badge>
+                                    </DeleteDialog>
                                 )}
                             </div>
                         </CardHeader>
                         <CardContent>
                             <form className="flex flex-col gap-4">
                                 {/* marque */}
-                                <FieldGroup>
-                                    <FieldLabel htmlFor="brand">
-                                        Marque
-                                    </FieldLabel>
-                                    <Input onChange={updateVehicleDetails} id="brand" name="brand" value={vehicleDetails?.brand} defaultValue={vehicleDetails?.brand} />
+                                <FieldGroup className="mb-4">
+                                    <Field>
+                                        <FieldLabel htmlFor="brand">
+                                            Marque
+                                        </FieldLabel>
+                                        <Input onChange={updateVehicleDetails} id="brand" name="brand" value={vehicleDetails?.brand} defaultValue={vehicleDetails?.brand} />
+                                    </Field>
                                 </FieldGroup>
 
                                 {/* modèle */}
-                                <FieldGroup>
-                                    <FieldLabel htmlFor="model">Modèle</FieldLabel>
-                                    <Input onChange={updateVehicleDetails} id="model" name="model" value={vehicleDetails?.model} defaultValue={vehicleDetails?.model} />
+                                <FieldGroup className="mb-4">
+                                    <Field>
+                                        <FieldLabel htmlFor="model">Modèle</FieldLabel>
+                                        <Input onChange={updateVehicleDetails} id="model" name="model" value={vehicleDetails?.model} defaultValue={vehicleDetails?.model} />
+                                    </Field>
                                 </FieldGroup>
 
                                 {/* année */}
-                                <FieldGroup>
-                                    <FieldLabel htmlFor="year">Première immatriculation</FieldLabel>
-                                    <Input onChange={updateVehicleDetails} id="year" name="year" value={vehicleDetails?.year} defaultValue={vehicleDetails?.year} />
+                                <FieldGroup className="mb-4">
+                                    <Field>
+                                        <FieldLabel htmlFor="year">Première immatriculation</FieldLabel>
+                                        <Input onChange={updateVehicleDetails} id="year" name="year" value={vehicleDetails?.year} defaultValue={vehicleDetails?.year} />
+                                    </Field>
                                 </FieldGroup>
 
                                 {/* kilométrage */}
-                                <FieldGroup>
-                                    <FieldLabel htmlFor="mileage">Kilométrage</FieldLabel>
-                                    <Input onChange={updateVehicleDetails} id="mileage" name="mileage" value={vehicleDetails?.mileage} defaultValue={vehicleDetails?.mileage} />
+                                <FieldGroup className="mb-4">
+                                    <Field>
+                                        <FieldLabel htmlFor="mileage">Kilométrage</FieldLabel>
+                                        <Input onChange={updateVehicleDetails} id="mileage" name="mileage" value={vehicleDetails?.mileage} defaultValue={vehicleDetails?.mileage} />
+                                    </Field>
                                 </FieldGroup>
 
                                 {/* montant listé */}
-                                <FieldGroup>
-                                    <FieldLabel htmlFor="listedAmount">Montant</FieldLabel>
-                                    <Input onChange={updateVehicleDetails} id="listedAmount" name="listedAmount" value={vehicleDetails?.listedAmount} defaultValue={vehicleDetails?.listedAmount} />
+                                <FieldGroup className="mb-4">
+                                    <Field>
+                                        <FieldLabel htmlFor="listedAmount">Montant</FieldLabel>
+                                        <Input onChange={updateVehicleDetails} id="listedAmount" name="listedAmount" value={vehicleDetails?.listedAmount} defaultValue={vehicleDetails?.listedAmount} />
+                                    </Field>
                                 </FieldGroup>
                                 {/* motorisation */}
                                 <FieldGroup >
-                                    <FieldLabel htmlFor="motorization">Motorisation</FieldLabel>
-                                    <Select 
-                                        onValueChange={(value)=>updateVehicleDetails({ target: { name: 'motorization', value } } as React.ChangeEvent<HTMLInputElement>)} 
-                                        name="motorization" value={String(vehicleDetails?.motorization)} 
-                                        defaultValue={String(vehicleDetails?.motorization)}
-                                    >
-                                        <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Sélectionner la motorisation" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectGroup>
-                                                {Object.entries(motorizationLabels).map(([value, label]) => (
-                                                    <SelectItem key={value} value={value}>
-                                                        {label}
-                                                    </SelectItem>
-                                                ))}
-    
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
+                                    <Field>
+                                        <FieldLabel htmlFor="motorization">Motorisation</FieldLabel>
+                                        <Select 
+                                            onValueChange={(value)=>updateVehicleDetails({ target: { name: 'motorization', value } } as React.ChangeEvent<HTMLInputElement>)} 
+                                            name="motorization" value={String(vehicleDetails?.motorization)} 
+                                            defaultValue={String(vehicleDetails?.motorization)}
+                                        >
+                                            <SelectTrigger className="w-full">
+                                                <SelectValue placeholder="Sélectionner la motorisation" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectGroup>
+                                                    {Object.entries(motorizationLabels).map(([value, label]) => (
+                                                        <SelectItem key={value} value={value}>
+                                                            {label}
+                                                        </SelectItem>
+                                                    ))}
+        
+                                                </SelectGroup>
+                                            </SelectContent>
+                                        </Select>
+                                    </Field>
                                 </FieldGroup>
 
                                 {/* type d'annonce */}
-                                <FieldGroup>
-                                    <FieldLabel htmlFor="listingType">Type d'annonce</FieldLabel>
-                                    <Field orientation="horizontal">
+                                <FieldGroup className="mb-4">
+                                    <Field orientation="vertical">
+                                        <FieldLabel htmlFor="listingType">Type d'annonce</FieldLabel>
                                         <Select 
                                             onValueChange={(value=>updateVehicleDetails({target:{name:"listingType",value}} as React.ChangeEvent<HTMLInputElement>))} 
                                             value={String(vehicleDetails?.listingType)} 
@@ -175,33 +298,35 @@ export default function VehicleSettings() {
                                 </FieldGroup>
 
                                 {/* statut du véhicule */}
-                                <FieldGroup>
-                                    <FieldLabel htmlFor="status">Statut du véhicule</FieldLabel>
-                                    <Select 
-                                        onValueChange={(value=>updateVehicleDetails({target:{name:"status",value:value}} as React.ChangeEvent<HTMLInputElement>))} 
-                                        value={String(vehicleDetails?.status)} 
-                                        defaultValue={String(vehicleDetails?.status)} 
-                                        name="status" 
-                                    >
-                                        <SelectTrigger className="w-full">
-                                            <SelectValue onChange={updateVehicleDetails} placeholder="Sélectionner le statut du véhicule" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectGroup>
-                                                {Object.entries(vehicleStatusLabels).map(([value, label]) => (
-                                                    <SelectItem key={value} value={value}>
-                                                        {label}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
+                                <FieldGroup className="mb-4">
+                                    <Field>
+                                        <FieldLabel htmlFor="status">Statut du véhicule</FieldLabel>
+                                        <Select 
+                                            onValueChange={(value=>updateVehicleDetails({target:{name:"status",value:value}} as React.ChangeEvent<HTMLInputElement>))} 
+                                            value={String(vehicleDetails?.status)} 
+                                            defaultValue={String(vehicleDetails?.status)} 
+                                            name="status" 
+                                        >
+                                            <SelectTrigger className="w-full">
+                                                <SelectValue onChange={updateVehicleDetails} placeholder="Sélectionner le statut du véhicule" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectGroup>
+                                                    {Object.entries(vehicleStatusLabels).map(([value, label]) => (
+                                                        <SelectItem key={value} value={value}>
+                                                            {label}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectGroup>
+                                            </SelectContent>
+                                        </Select>
+                                    </Field>
                                 </FieldGroup>
                                 
                                 {/* durée de location */}
-                                <FieldGroup>
-                                    <FieldLabel htmlFor="rentalTermMonths">Durée de location (mois)</FieldLabel>
-                                    <Field orientation="horizontal">
+                                <FieldGroup className="mb-4">
+                                    <Field orientation="vertical">
+                                        <FieldLabel htmlFor="rentalTermMonths">Durée de location (mois)</FieldLabel>
                                         <Select 
                                         onValueChange={(value=>updateVehicleDetails({target:{name:"rentalTermMonths",value:value}} as React.ChangeEvent<HTMLInputElement>))} 
                                         value={String(vehicleDetails?.rentalTermMonths)} 
@@ -221,15 +346,63 @@ export default function VehicleSettings() {
                                         </Select>
                                     </Field>
                                 </FieldGroup>
-                                
-                                
-                                
 
+                                {/* file upload */}
+                                <FieldGroup className="mb-4">
+                                    <FieldTitle>Image du véhicule</FieldTitle>
+                                    <Field orientation="horizontal">
+                                        <Field orientation="vertical">
+                                            <FieldLabel htmlFor="image">Image actuelle</FieldLabel>
+                                            <Dialog>
+                                                <DialogTrigger asChild>
+                                                    <Link to="#" className="w-32 h-32 max-w-full object-cover rounded-md mr-4">
+                                                        <img 
+                                                            src={vehicleDetails?.imageUrl ? `${import.meta.env.VITE_API_URL}${vehicleDetails.imageUrl.replace("wwwroot", "")}` : "/NoPicture.png"}
+                                                            alt={vehicleDetails?.model || "Vehicle"} 
+                                                            className="w-full h-full object-cover rounded-md mr-4" 
+                                                        />
+                                                    </Link>
+                                                </DialogTrigger>
+                                                <DialogContent className="m-0 p-0">
+                                                    {/* real size image */}
+                                                    {/* add here the full size image */}
+
+                                                    <img src={
+                                                        vehicleDetails?.imageUrl ?
+                                                        `${import.meta.env.VITE_API_URL}${vehicleDetails?.imageUrl?.replace("wwwroot", "")}` : 
+                                                        "/NoPicture.png"} 
+                                                        alt={vehicleDetails?.model || "Vehicle"} className="w-full object-cover rounded-md" />
+                                                </DialogContent>   
+                                            </Dialog>
+                                        </Field>
+                                        <Input onChange={handleImageChange} id="image" name="image" type="file" accept="image/*" />
+                                    </Field>
+                                </FieldGroup>
                             </form>
+                            {/* associated applications */}
+                            {vehicleDetails?.applications   && (
+                                <div className="mt-6">
+                                    <h3 className="text-md font-medium mb-4">Dossiers associés</h3>
+                                    <div className="flex flex-col gap-4 w-full">
+                                        {vehicleDetails.applications.map((application) => (
+
+                                            <Link to={`/application/${application.id}`} key={application.id}>
+                                                <Card className={`flex flex-row bg-${ApplicationStatusMap[application.status].color}-100 p-4 hover:bg-${ApplicationStatusMap[application.status].color}-800 transition-colors`}>
+                                                    <div>
+                                                        <p><strong>Dossier numéro :</strong> {application.id}</p>
+                                                        <p><strong>Statut :</strong> {ApplicationStatusMap[application.status].label}</p>
+                                                    </div>
+                                                </Card>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </CardContent>
-                    </Card>
+                    </>
                 )
             }
+            </Card>
         </>
     )
 }

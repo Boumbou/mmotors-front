@@ -80,7 +80,7 @@ export default function Vehicles() {
                 {vehiclesResponse.items.length>0 && vehiclesResponse.items.map((vehicle) => (
                   
                   <Card key={vehicle.id} className="flex min-w-[250px] md:basis-1/4 xs:basis-full bg-white">
-                      <img src={vehicle.imageUrl || "/NoPicture.png"} alt={`${vehicle.brand} ${vehicle.model}`} className="w-full h-48 object-cover rounded-none" />
+                      <img src={vehicle.imageUrl ? `${import.meta.env.VITE_API_URL}${vehicle.imageUrl.replace("wwwroot", "")}` : "/NoPicture.png"} alt={`${vehicle.brand} ${vehicle.model}`} className="w-full h-48 object-cover rounded-none" />
                     <CardHeader>
                       <div className="flex flex-row">
                         <CardTitle>{vehicle.brand} {vehicle.model}</CardTitle>

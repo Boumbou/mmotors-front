@@ -125,7 +125,7 @@ export default function VehicleDetails() {
                 <h1 className="text-4xl">{vehicle.brand} {vehicle.model} {vehicle.year}</h1>
                 <div className="flex flex-row flex-wrap min-w-full gap-5">
                     <div className=" md:min-100 md:max-w-150 basis-full rounded-lg bg-white">
-                        <img src={vehicle.imageUrl || "/NoPicture.png"} alt={`${vehicle.brand} ${vehicle.model}`} className="w-auto h-full rounded-lg object-cover"/>
+                        <img src={vehicle.imageUrl ? `${import.meta.env.VITE_API_URL}${vehicle.imageUrl.replace("wwwroot", "")}` : "/NoPicture.png"} alt={`${vehicle.brand} ${vehicle.model}`} className="w-auto h-full rounded-lg object-cover"/>
                     </div>
                     {/* display application option for customer only */}
                     {(user?.roles.includes("Customer") || !user) && (

@@ -3,12 +3,13 @@ import { Card, CardAction, CardContent, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import useStore from "@/routes/auth/userStore"
 import { type ApplicationType } from "@/types/ApplicationType";
+import type { PagedResult } from "@/types/PagedResult";
 import type { User } from "@/types/UserType";
 import { Trash, Warning } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useNavigate } from "react-router";
 
-export default function CustomerProfile({ applications, numberOfApplications, changeSectionCallBack }: { applications: ApplicationType[], numberOfApplications: number, changeSectionCallBack: (section: string) => void }) {
+export default function CustomerProfile({ applications, pagedResult, changeSectionCallBack }: { applications: ApplicationType[], pagedResult: PagedResult, changeSectionCallBack: (section: string) => void }) {
     const user: User | null = useStore((state: any) => state.user)
     const navigate = useNavigate();
 
@@ -33,10 +34,10 @@ export default function CustomerProfile({ applications, numberOfApplications, ch
                 <Card className="px-4">
                     <CardTitle className="text-lg pl-4">Mes dossiers</CardTitle>
                     <CardContent className="flex flex-col gap-3">
-                        {numberOfApplications === 0 ? (
+                        {pagedResult.totalCount === 0 ? (
                             <p className="text-lg font-light">Vous n'avez aucun dossier en cours.</p>
                         ) : (
-                            <p className="text-lg font-light">Vous avez {numberOfApplications} dossier(s) en cours.</p>
+                            <p className="text-lg font-light">Vous avez {pagedResult.totalCount} dossier(s) en cours.</p>
                         )}
                     </CardContent>
                     <CardAction  className="min-h-10 w-full">
