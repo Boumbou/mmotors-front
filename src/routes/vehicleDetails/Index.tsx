@@ -7,6 +7,7 @@ import useStore from "../auth/userStore";
 import NewApplication from "./components/NewApplication";
 import type { ServiceType } from "../../types/ServiceType";
 import AlreadyApplied from "./components/AlreadyApplied";
+import { motion } from "framer-motion";
 
 export default function VehicleDetails() {
     const [vehicle, setVehicle] = useState<VehicleType | null>(null);
@@ -109,64 +110,67 @@ export default function VehicleDetails() {
         {error && <p style={{ color: "red" }}>{error}</p>}
         {vehicle && (
             // <div className="flex flex-col gap-5 md:mx-30 mx-5 md:justify-start justify-center mt-10">
-            <div className="flex flex-col gap-5">
-            
-                <Breadcrumb>
-                    <BreadcrumbList>
-                    <BreadcrumbItem>
-                        <BreadcrumbLink href={"/catalogue"+location.search}>Catalogue</BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem>
-                        <BreadcrumbLink href="#" >{vehicle ? `${vehicle.brand} ${vehicle.model}` : "Détails du véhicule"}</BreadcrumbLink>
-                    </BreadcrumbItem>
-                    </BreadcrumbList>
-                </Breadcrumb>
-                <h1 className="text-4xl">{vehicle.brand} {vehicle.model} {vehicle.year}</h1>
-                <div className="flex flex-row flex-wrap min-w-full gap-5">
-                    <div className=" md:min-100 md:max-w-150 basis-full rounded-lg bg-white">
-                        <img src={vehicle.imageUrl ? `${import.meta.env.VITE_API_URL}${vehicle.imageUrl.replace("wwwroot", "")}` : "/NoPicture.png"} alt={`${vehicle.brand} ${vehicle.model}`} className="w-auto h-full rounded-lg object-cover"/>
-                    </div>
-                    {/* display application option for customer only */}
-                    {(user?.roles.includes("Customer") || !user) && (
-                        <>
-                            {alreadyApplied ? (
-                                <AlreadyApplied />
-                            ) : (
-                                <NewApplication 
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} >
+
+                <div className="flex flex-col gap-5">
+                
+                    <Breadcrumb>
+                        <BreadcrumbList>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink href={"/catalogue"+location.search}>Catalogue</BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbSeparator />
+                        <BreadcrumbItem>
+                            <BreadcrumbLink href="#" >{vehicle ? `${vehicle.brand} ${vehicle.model}` : "Détails du véhicule"}</BreadcrumbLink>
+                        </BreadcrumbItem>
+                        </BreadcrumbList>
+                    </Breadcrumb>
+                    <h1 className="text-4xl">{vehicle.brand} {vehicle.model} {vehicle.year}</h1>
+                    <div className="flex flex-row flex-wrap min-w-full gap-5">
+                        <div className=" md:min-100 md:max-w-150 basis-full rounded-lg bg-white">
+                            <img src={vehicle.imageUrl ? `${import.meta.env.VITE_API_URL}${vehicle.imageUrl.replace("wwwroot", "")}` : "/NoPicture.png"} alt={`${vehicle.brand} ${vehicle.model}`} className="w-auto h-full rounded-lg object-cover"/>
+                        </div>
+                        {/* display application option for customer only */}
+                        {(user?.roles.includes("Customer") || !user) && (
+                            <>
+                                {alreadyApplied ? (
+                                    <AlreadyApplied />
+                                ) : (
+                                    <NewApplication 
                                     listingType={vehicle.listingType} 
                                     availableServices={availableServices} 
                                     selectedServices={selectedServices} 
                                     onCheckboxChange={onCheckboxChange} 
                                     onInitiateApplication={onInitiateApplication}
-                                />
-                            )}
-                        </>
-                    )}
+                                    />
+                                )}
+                            </>
+                        )}
+                    </div>
+                    <Badge variant="outline" className="w-fit text-lg p-5 bg-blue-100 border-blue-300">
+                        { listingTypeLabels[vehicle.listingType]}
+                    </Badge>
+                    <h2 className="text-xl">--- Détails du véhicule</h2>
+                    <div className="flex flex-row flex-wrap md:gap-20 gap-10 mb-20">
+                        <div className="flex-col w-50">
+                            <p className="text-slate-400 italic font-light">Marque</p> 
+                            <p>{vehicle.brand}</p>
+                        </div>
+                        <div className="flex-col w-50">
+                            <p className="text-slate-400 italic font-light">Modèle</p> 
+                            <p>{vehicle.model}</p>
+                        </div>
+                        <div className="flex-col w-50">
+                            <p className="text-slate-400 italic font-light">Année</p> 
+                            <p>{vehicle.year}</p>
+                        </div>
+                        <div className="flex-col w-50">
+                            <p className="text-slate-400 italic font-light">Prix</p> 
+                            <p>{vehicle.listedAmount} €</p>
+                        </div>
+                    </div>
                 </div>
-                <Badge variant="outline" className="w-fit text-lg p-5 bg-blue-100 border-blue-300">
-                    { listingTypeLabels[vehicle.listingType]}
-                </Badge>
-                <h2 className="text-xl">--- Détails du véhicule</h2>
-                <div className="flex flex-row flex-wrap md:gap-20 gap-10 mb-20">
-                    <div className="flex-col w-50">
-                        <p className="text-slate-400 italic font-light">Marque</p> 
-                        <p>{vehicle.brand}</p>
-                    </div>
-                    <div className="flex-col w-50">
-                        <p className="text-slate-400 italic font-light">Modèle</p> 
-                        <p>{vehicle.model}</p>
-                    </div>
-                    <div className="flex-col w-50">
-                        <p className="text-slate-400 italic font-light">Année</p> 
-                        <p>{vehicle.year}</p>
-                    </div>
-                    <div className="flex-col w-50">
-                        <p className="text-slate-400 italic font-light">Prix</p> 
-                        <p>{vehicle.listedAmount} €</p>
-                    </div>
-                </div>
-            </div>
+            </motion.div>
             // </div>
         )}
     </div>

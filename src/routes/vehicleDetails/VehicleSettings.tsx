@@ -4,7 +4,7 @@ import Forbidden from "@/components/Foribidden";
 import React, { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { motorizationLabels, vehicleStatusLabels, type VehicleType } from "@/types/VehicleType";
+import { motorizationLabels, VehicleStatus, vehicleStatusLabels, type VehicleType } from "@/types/VehicleType";
 import { Field, FieldGroup, FieldLabel, FieldTitle } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ export default function VehicleSettings() {
     const { id } = useParams<{ id: string }>();
     const vehicleId = parseInt(id || "", 10);
     const user = useStore((state) => state.user);
-    const [vehicleDetails, setVehicleDetails] = useState<VehicleType | null>(null);
+    const [vehicleDetails, setVehicleDetails] = useState<VehicleType>({brand: "", model: "", mileage: 0, listedAmount: 0,status:VehicleStatus.AVAILABLE} as VehicleType);
     const [loading, setLoading] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
@@ -31,6 +31,20 @@ export default function VehicleSettings() {
 
     if (user?.roles.includes("Customer")) {
         return <Forbidden />;
+    }
+
+    const validateForm = () => {
+        if (!vehicleDetails) return false;
+        if (vehicleDetails.brand.trim() === "") return false;
+        if (vehicleDetails.model.trim() === "") return false;
+        if (!vehicleDetails.year) return false;
+        if (vehicleDetails.mileage < 0) return false;
+        if (vehicleDetails.listedAmount <= 0) return false;
+        if (vehicleDetails.motorization === undefined) return false;
+        if (vehicleDetails.status === undefined) return false;
+        if (vehicleDetails.listingType === undefined) return false;
+        if (vehicleDetails.listingType === 1 && !vehicleDetails.rentalTermMonths) return false;
+        return true;
     }
 
     const fetchVehicleDetails = async () => {
@@ -179,7 +193,7 @@ export default function VehicleSettings() {
                 
             }
             {
-                (vehicleDetails || location.pathname.includes("nouveau")) && (
+                (vehicleDetails.id || location.pathname.includes("nouveau")) && (
                     <>
                         
                         
@@ -188,7 +202,7 @@ export default function VehicleSettings() {
                             {vehicleDetails && <h2 className="text-lg font-medium">Paramètres du véhicule # {vehicleDetails.id}</h2> }
                             {!vehicleDetails && <h2 className="text-lg font-medium">Ajouter un nouveau véhicule</h2> }
                             <div className="flex flex-row items-center gap-2">
-                                <Button className="bg-blue-500 mr-3" variant="default" size="lg" onClick={onCreateOrUpdateVehicle}>
+                                <Button disabled={!validateForm()} className="bg-blue-500 mr-3" variant="default" size="lg" onClick={onCreateOrUpdateVehicle}>
                                     <HugeiconsIcon icon={Save} className="w-4 h-4" />
                                 </Button>
                                 {/* delete button */}
@@ -213,7 +227,13 @@ export default function VehicleSettings() {
                                         <FieldLabel htmlFor="brand">
                                             Marque
                                         </FieldLabel>
-                                        <Input onChange={updateVehicleDetails} id="brand" name="brand" value={vehicleDetails?.brand} defaultValue={vehicleDetails?.brand} />
+                                        <Input 
+                                            onChange={updateVehicleDetails} id="brand" 
+                                            name="brand" 
+                                            value={vehicleDetails?.brand} 
+                                            defaultValue={vehicleDetails?.brand} 
+                                            className={`border-0 bg-slate-100 p-1 text-sm font-light rounded-md ${vehicleDetails?.brand === "" ? "border-2 border-red-300" : ""}`}
+                                        />
                                     </Field>
                                 </FieldGroup>
 
@@ -221,7 +241,13 @@ export default function VehicleSettings() {
                                 <FieldGroup className="mb-4">
                                     <Field>
                                         <FieldLabel htmlFor="model">Modèle</FieldLabel>
-                                        <Input onChange={updateVehicleDetails} id="model" name="model" value={vehicleDetails?.model} defaultValue={vehicleDetails?.model} />
+                                        <Input 
+                                            onChange={updateVehicleDetails} id="model" 
+                                            name="model" 
+                                            value={vehicleDetails?.model} 
+                                            defaultValue={vehicleDetails?.model} 
+                                            className={`border-0 bg-slate-100 p-1 text-sm font-light rounded-md ${vehicleDetails?.model === "" ? "border-2 border-red-300" : ""}`}
+                                        />
                                     </Field>
                                 </FieldGroup>
 
@@ -229,7 +255,16 @@ export default function VehicleSettings() {
                                 <FieldGroup className="mb-4">
                                     <Field>
                                         <FieldLabel htmlFor="year">Première immatriculation</FieldLabel>
-                                        <Input onChange={updateVehicleDetails} id="year" name="year" value={vehicleDetails?.year} defaultValue={vehicleDetails?.year} />
+                                        <Input 
+                                            type="number"
+                                            min={2000}
+                                            onChange={updateVehicleDetails} 
+                                            id="year" 
+                                            name="year" 
+                                            value={vehicleDetails?.year} 
+                                            defaultValue={vehicleDetails?.year} 
+                                            className={`border-0 bg-slate-100 p-1 text-sm font-light rounded-md ${ !vehicleDetails?.year? "border-2 border-red-300" : ""}`}
+                                        />
                                     </Field>
                                 </FieldGroup>
 
@@ -237,7 +272,13 @@ export default function VehicleSettings() {
                                 <FieldGroup className="mb-4">
                                     <Field>
                                         <FieldLabel htmlFor="mileage">Kilométrage</FieldLabel>
-                                        <Input onChange={updateVehicleDetails} id="mileage" name="mileage" value={vehicleDetails?.mileage} defaultValue={vehicleDetails?.mileage} />
+                                        <Input 
+                                            type="number"
+                                            min={0}
+                                            onChange={updateVehicleDetails} 
+                                            id="mileage" name="mileage" value={vehicleDetails?.mileage} defaultValue={vehicleDetails?.mileage} 
+                                            className={`border-0 bg-slate-100 p-1 text-sm font-light rounded-md ${vehicleDetails?.mileage === 0 ? "border-2 border-red-300" : ""}`}
+                                        />
                                     </Field>
                                 </FieldGroup>
 
@@ -245,7 +286,12 @@ export default function VehicleSettings() {
                                 <FieldGroup className="mb-4">
                                     <Field>
                                         <FieldLabel htmlFor="listedAmount">Montant</FieldLabel>
-                                        <Input onChange={updateVehicleDetails} id="listedAmount" name="listedAmount" value={vehicleDetails?.listedAmount} defaultValue={vehicleDetails?.listedAmount} />
+                                        <Input 
+                                            type="number"
+                                            onChange={updateVehicleDetails} 
+                                            id="listedAmount" name="listedAmount" value={vehicleDetails?.listedAmount} defaultValue={vehicleDetails?.listedAmount} 
+                                            className={`border-0 bg-slate-100 p-1 text-sm font-light rounded-md ${vehicleDetails?.listedAmount === 0 ? "border-2 border-red-300" : ""}`}
+                                        />
                                     </Field>
                                 </FieldGroup>
                                 {/* motorisation */}
@@ -256,9 +302,12 @@ export default function VehicleSettings() {
                                             onValueChange={(value)=>updateVehicleDetails({ target: { name: 'motorization', value } } as React.ChangeEvent<HTMLInputElement>)} 
                                             name="motorization" value={String(vehicleDetails?.motorization)} 
                                             defaultValue={String(vehicleDetails?.motorization)}
+                                            
                                         >
-                                            <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Sélectionner la motorisation" />
+                                            <SelectTrigger className={`border-0 bg-slate-100 p-1 text-sm font-light rounded-md ${!vehicleDetails?.motorization ? "border-2 border-red-300" : ""}`}>
+                                                <SelectValue 
+                                                placeholder="Sélectionner la motorisation" 
+                                                />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectGroup>
@@ -268,29 +317,6 @@ export default function VehicleSettings() {
                                                         </SelectItem>
                                                     ))}
         
-                                                </SelectGroup>
-                                            </SelectContent>
-                                        </Select>
-                                    </Field>
-                                </FieldGroup>
-
-                                {/* type d'annonce */}
-                                <FieldGroup className="mb-4">
-                                    <Field orientation="vertical">
-                                        <FieldLabel htmlFor="listingType">Type d'annonce</FieldLabel>
-                                        <Select 
-                                            onValueChange={(value=>updateVehicleDetails({target:{name:"listingType",value}} as React.ChangeEvent<HTMLInputElement>))} 
-                                            value={String(vehicleDetails?.listingType)} 
-                                            defaultValue={String(vehicleDetails?.listingType)} 
-                                            name="listingType" 
-                                        >
-                                            <SelectTrigger className="w-full">
-                                                <SelectValue onChange={updateVehicleDetails} placeholder="Sélectionner le type d'annonce" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectGroup>
-                                                    <SelectItem value="0">Vente</SelectItem>
-                                                    <SelectItem value="1">Location</SelectItem>
                                                 </SelectGroup>
                                             </SelectContent>
                                         </Select>
@@ -307,7 +333,7 @@ export default function VehicleSettings() {
                                             defaultValue={String(vehicleDetails?.status)} 
                                             name="status" 
                                         >
-                                            <SelectTrigger className="w-full">
+                                            <SelectTrigger className={`border-0 bg-slate-100 p-1 text-sm font-light rounded-md ${vehicleDetails?.status === undefined ? "border-2 border-red-300" : ""}`}>
                                                 <SelectValue onChange={updateVehicleDetails} placeholder="Sélectionner le statut du véhicule" />
                                             </SelectTrigger>
                                             <SelectContent>
@@ -322,6 +348,31 @@ export default function VehicleSettings() {
                                         </Select>
                                     </Field>
                                 </FieldGroup>
+
+                                {/* type d'annonce */}
+                                <FieldGroup className="mb-4">
+                                    <Field orientation="vertical">
+                                        <FieldLabel htmlFor="listingType">Type d'annonce</FieldLabel>
+                                        <Select 
+                                            onValueChange={(value=>updateVehicleDetails({target:{name:"listingType",value}} as React.ChangeEvent<HTMLInputElement>))} 
+                                            value={String(vehicleDetails?.listingType)} 
+                                            defaultValue={String(vehicleDetails?.listingType)} 
+                                            name="listingType" 
+                                        >
+                                            <SelectTrigger className={`border-0 bg-slate-100 p-1 text-sm font-light rounded-md ${vehicleDetails?.listingType === undefined ? "border-2 border-red-300" : ""}`}>
+                                                <SelectValue onChange={updateVehicleDetails} placeholder="Sélectionner le type d'annonce" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectGroup>
+                                                    <SelectItem value="0">Vente</SelectItem>
+                                                    <SelectItem value="1">Location</SelectItem>
+                                                </SelectGroup>
+                                            </SelectContent>
+                                        </Select>
+                                    </Field>
+                                </FieldGroup>
+
+                                
                                 
                                 {/* durée de location */}
                                 <FieldGroup className="mb-4">
@@ -334,7 +385,7 @@ export default function VehicleSettings() {
                                         name="rentalTermMonths"
                                         disabled={vehicleDetails?.listingType !== 1}
                                     >
-                                            <SelectTrigger className="w-full">
+                                            <SelectTrigger className={`border-0 bg-slate-100 p-1 text-sm font-light rounded-md ${vehicleDetails?.listingType !== 1 ? "hidden" : ""} ${!vehicleDetails?.rentalTermMonths ? "border-2 border-red-300" : ""}`}>
                                                 <SelectValue onChange={updateVehicleDetails} placeholder="Sélectionner la durée de location" />
                                             </SelectTrigger>
                                             <SelectContent>

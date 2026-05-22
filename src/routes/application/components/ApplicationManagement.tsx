@@ -1,6 +1,6 @@
 import {Card, CardAction, CardContent, CardHeader, CardTitle} from "../../../components/ui/card";
 import {HugeiconsIcon} from "@hugeicons/react";
-import { Car, Car01Icon, Check, CheckCircle, Close, File01Icon, Mail, Money, Pause, Send, Trash2, ValidationApprovalIcon} from "@hugeicons/core-free-icons";
+import { Car, Car01Icon, Check, CheckCircle, Close, Download, File01Icon, Mail, Money, Pause, Send, Trash2, ValidationApprovalIcon} from "@hugeicons/core-free-icons";
 import {Separator} from "../../../components/ui/separator";
 import {Button} from "../../../components/ui/button";
 import type { VehicleType } from "@/types/VehicleType";
@@ -28,6 +28,7 @@ export default function ApplicationManagement(
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState(ApplicationStatusMap[application.status]);
     const [rejectionReason, setRejectionReason] = useState<string>(application.rejectionReason);
+    const [appDocuments, setAppDocuments] = useState(application.documents);
 
 
     const OnDeleteApplication = async () => {
@@ -51,10 +52,9 @@ export default function ApplicationManagement(
     }
 
     const DeleteApplicationButton = (): JSX.Element => (
-        <Button variant="destructive" className="text-sm font-light" >
-            <HugeiconsIcon icon={Trash2} className="w-5 h-5 mr-2" />
-                Supprimer le dossier
-        </Button>
+            <Badge variant="destructive" className="text-sm h-8 rounded-lg font-light hover:bg-red-200" >
+                <HugeiconsIcon icon={Trash2} className="w-5 h-5" />
+            </Badge>
     )
 
     const onSubmit = async () => {
@@ -98,9 +98,10 @@ export default function ApplicationManagement(
         if (!file) return;
         // call api to upload the file for the document with id documentId
         const formData = new FormData();
-        formData.append("file", file);
+        formData.append("document", file);
+        formData.append("id", documentId.toString());
         setLoading(true);
-        fetch(`/api/applications/${application.id}/documents/${documentId}/upload`, {
+        fetch(`/api/documents/upload`, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${user.token}`
@@ -112,7 +113,59 @@ export default function ApplicationManagement(
         }).finally(() => {
             setLoading(false);
         });
+        //update document state
+        setAppDocuments((prevDocuments: any) => prevDocuments.map((doc: any) => {
+            if (doc.id === documentId) {
+                return { ...doc, url: URL.createObjectURL(file) };
+            }
+            return doc;
+        }));
+
         toast.success("Document téléchargé avec succès");
+    }
+
+    const onDownloadDocument = (key: string) => {
+        //call download api endpoint
+        fetch(`/api/documents/download/${key}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${user.token}`
+            }
+        }).then((response) => {
+            if (!response.ok) {
+                throw new Error("Une erreur est survenue lors du téléchargement du document. Veuillez réessayer.");
+            }
+            return response.blob();
+        }).then((blob) => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = key;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        }).catch((error) => {
+            toast.error(error.message);
+        });
+    }
+
+    const onDeleteDocument = (id: number) => {
+        fetch(`/api/documents/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${user.token}`
+            }
+        }).catch((error) => {
+            toast.error("Nous n'avons pas pu supprimer le document. Veuillez réessayer plus tard.");
+            throw error;
+        });
+        setAppDocuments((prevDocuments: any) => prevDocuments.map((doc: any) => {
+            if (doc.id === id) {
+                return { ...doc, url: null, key: null };
+            }
+            return doc;
+        }));
+        toast.success("Document supprimé avec succès");
     }
 
     const reviewApplication = async (decision: {ApplicationId: number, IsApproved: boolean, RejectionReason: string | null}) => {
@@ -337,18 +390,20 @@ export default function ApplicationManagement(
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="flex flex-col justify-start gap-5">
-                    {application.documents.map((document: any) => (
+                    {appDocuments.map((document: any) => (
                         <div key={document.id} className="flex flex-row justify-between items-center gap-5">
                             <p className="text-lg">{document.fileName}</p>
                             {/* if document.url is not null, display a link to the document, otherwise display an upload button */}
                             {
                                 document.url ? (
-                                    <a href={document.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
-                                        <span>
-                                            <HugeiconsIcon icon={File01Icon} className="w-6 h-6 text-blue-500" />
-                                        </span>
-                                        Voir le document
-                                    </a>
+                                    <div className="flex flex-row gap-2">
+                                        <Button variant="outline" className="w-auto text-sm p-4" onClick={() => onDownloadDocument(document.key)}>
+                                                <HugeiconsIcon icon={Download} className="w-6 h-6 text-blue-500" />
+                                        </Button>
+                                        <Button variant="destructive" className="w-auto text-sm p-4" onClick={() => onDeleteDocument(document.id)}>
+                                            <HugeiconsIcon icon={Trash2} className="w-5 h-5" />
+                                        </Button>
+                                    </div>
                                 ) : (
                                     !isStaff? 
                                         status.label === ApplicationStatusMap[ApplicationStatus.Draft].label ||
@@ -356,7 +411,6 @@ export default function ApplicationManagement(
                                         (
                                             <input
                                                 type="file"
-                                                disabled
                                                 id={`upload-${document.id}`}
                                                 className="bg-slate-100 text-slate-500 text-sm rounded-md border border-slate-300 cursor-pointer file:bg-transparent file:border-0 file:text-sm file:font-medium hover:file:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-200 focus:ring-offset-2 disabled:cursor-not-allowed disabled:file:bg-transparent disabled:file:border-0 disabled:file:text-slate-300"
                                                 onChange={(event) => onFileChange(event, document.id)}

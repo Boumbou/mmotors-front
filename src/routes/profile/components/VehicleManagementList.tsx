@@ -6,6 +6,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { Add } from "@hugeicons/core-free-icons";
 import { Link } from "react-router";
 import MmotorsPagination from "@/components/pagination/MmotorsPagination";
+import { motion } from "framer-motion";
 
 export default function VehicleManagementList() {
     const [vehicles, setVehicles] = useState<VehicleType[]>([]);
@@ -63,17 +64,23 @@ export default function VehicleManagementList() {
                     Ajouter un véhicule
                 </Button>
             </Link>
-            <ManagementTable vehicles={vehicles} columns={columns} />
-            <div className="mt-3">
-                <MmotorsPagination
-                    currentPage={result.pageNumber}
-                    totalPages={result.totalPages}
-                    onPageChange={(page) => {
-                        // Handle page change, e.g., fetch new data for the selected page
-                        fetchVehicles(page, result.pageSize);
-                    }}
-                />
-            </div>
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                >
+
+                <ManagementTable vehicles={vehicles} columns={columns} />
+                <div className="mt-3">
+                    <MmotorsPagination
+                        currentPage={result.pageNumber}
+                        totalPages={result.totalPages}
+                        onPageChange={(page) => {
+                            // Handle page change, e.g., fetch new data for the selected page
+                            fetchVehicles(page, result.pageSize);
+                        }}
+                        />
+                </div>
+            </motion.div>
         </>
     );
 }

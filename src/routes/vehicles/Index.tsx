@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import MmotorsPagination from "@/components/pagination/MmotorsPagination";
+import VehicleCard from "./components/VehicleCard";
 
 export default function Vehicles() {
     //get last url section to determine if we are in achats or locations
@@ -35,7 +36,7 @@ export default function Vehicles() {
     const fetchVehicles = async (page: number = 1): Promise<VehicleListResponse> => {
         setLoading(true); 
         const type = transactionType == "achats" ? "sale" : transactionType === "locations" ? "rental" : null;
-        const response = await fetch(`/api/vehicles?type=${type}&pagenumber=${page}&pagesize=1`);
+        const response = await fetch(`/api/vehicles?type=${type}&pagenumber=${page}&pagesize=20`);
         const data = await response.json();
         setLoading(false);
         return data;
@@ -78,26 +79,8 @@ export default function Vehicles() {
               <div className="flex flex-row flex-wrap gap-5 w-full">
 
                 {vehiclesResponse.items.length>0 && vehiclesResponse.items.map((vehicle) => (
+                  <VehicleCard key={vehicle.id} vehicle={vehicle} searchParams={searchParams.toString()} />
                   
-                  <Card key={vehicle.id} className="flex min-w-[250px] md:basis-1/4 xs:basis-full bg-white">
-                      <img src={vehicle.imageUrl ? `${import.meta.env.VITE_API_URL}${vehicle.imageUrl.replace("wwwroot", "")}` : "/NoPicture.png"} alt={`${vehicle.brand} ${vehicle.model}`} className="w-full h-48 object-cover rounded-none" />
-                    <CardHeader>
-                      <div className="flex flex-row">
-                        <CardTitle>{vehicle.brand} {vehicle.model}</CardTitle>
-                        <Badge variant="secondary" className="ml-auto">{listingTypeLabels[vehicle.listingType]}</Badge>
-                      </div>
-                      <CardDescription>{vehicle.year} - {motorizationLabels[vehicle.motorization]}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <p>Kilometrage: {vehicle.mileage} km</p>
-                      <p>Prix: {vehicle.listedAmount} €</p>
-                    </CardContent>
-                    <CardFooter>
-                      <Link to={`/catalogue/vehicle/${vehicle.id}?${searchParams.toString()}`} className="w-full">
-                        <CardAction>Voir les détails</CardAction>
-                      </Link>
-                    </CardFooter>
-                  </Card>
                 ))}
               </div>
               {vehiclesResponse.items.length == 0 && !loading && (

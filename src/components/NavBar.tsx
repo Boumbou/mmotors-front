@@ -12,7 +12,7 @@ export default function NavBar() {
     const navigate = useNavigate();
 
     return (
-        <div className="flex p-10 items-center justify-between gap-10 flex-row h-10 w-full sticky top-0 bg-background ">
+        <div className="flex p-10 items-center justify-between gap-10 flex-row h-10 w-full sticky z-50 top-0 bg-background ">
             <Link to="/"><img src="/MMotorsLogo.png" alt="MMotors logo" className="h-8"/></Link>
             <ul className="flex flex-row gap-5">
                 {/* <NavLink to="/catalogue?type=achats&pagenumber=1&pagesize=1" className={(isActive) => isActive ? "text-blue-500" : "text-black"}>Acheter</NavLink>
@@ -22,7 +22,7 @@ export default function NavBar() {
             {user ? (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="default" className="h-10 w-10 rounded-full bg-slate-500" size="lg">{String(user.name).toUpperCase().substring(0, 1)}</Button>
+                        <Button variant="default" className="h-10 w-10 rounded-full bg-slate-500 cursor-pointer" size="lg">{String(user.name).toUpperCase().substring(0, 1)}</Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <DropdownMenuItem variant="default" className="text-slate-900" disabled>

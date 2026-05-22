@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Trash2 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
@@ -11,9 +11,10 @@ export function DeleteDialog({header, description, OnDeleteApplication, children
                 {children}
             </DialogTrigger>
             <DialogContent className="bg-red-100">
-                <DialogHeader>
+
+                <DialogTitle>
                     {header}
-                </DialogHeader>
+                </DialogTitle>
                 <DialogDescription >
                     {description}
                 </DialogDescription>
