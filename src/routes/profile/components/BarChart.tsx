@@ -42,7 +42,7 @@ export default function ChartBarDefault({data, title}: {data?: ApplicationType[]
     }, [] as { month: string, application: number }[])
   
     return (
-    <Card className="w-full">
+    <Card className="md:w-100 w-full">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>

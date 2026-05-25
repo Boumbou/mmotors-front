@@ -33,7 +33,7 @@ export default function Dashboard(
                 <div className="flex min-w-0  w-full flex-col gap-6 text-sm leading-loose">
                         <h1 className="text-lg font-medium">Bonjour {user.name}</h1>
                         <p className="text-md">Vous avez {pagedResult.totalCount} dossiers en cours</p>
-                        <div className="flex flex-row gap-4">
+                        <div className="flex flex-row justify-between flex-wrap gap-2">
                                 <ChartPieDonutText data={applications} title="Répartition des dossiers" />
                                 <BarChartDefault data={applications} title="Nombre de dossiers par mois" />
                         </div>

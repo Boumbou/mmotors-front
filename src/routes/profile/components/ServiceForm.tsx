@@ -51,7 +51,7 @@ export default function ServiceForm({service,refreshServices, deleteService}: {s
             Name: service.name,
             Description: service.description,
             OverheadType: service.overheadType,
-            OverheadValue: service.overheadValue,
+            OverheadValue: service.overheadType === 0 ? service.overheadValue / 100 : service.overheadValue,
             ListingType: service.listingType,
             IsOptional: service.isOptional ? true : false,
             IsActive: service.isActive ? true : false
@@ -112,7 +112,7 @@ export default function ServiceForm({service,refreshServices, deleteService}: {s
 
         serviceState &&
 
-            <FieldGroup>
+            <FieldGroup >
                 <Field orientation="horizontal">
                     {/* check if form is valid before enabling the save button */}
                     <Button  variant="default" size="sm" className="h-8 bg-blue-500 self-start" onClick={serviceState.id ? handleSave : handleCreate} disabled={!validateForm()}>
@@ -181,10 +181,10 @@ export default function ServiceForm({service,refreshServices, deleteService}: {s
                         name="overheadValue" 
                         onChange={handleInputChange} 
                         type="number" 
-                        step={serviceState.overheadType == 0 ? 0.01 : 1} 
+                        // step={serviceState.overheadType == 0 ? 0.01 : 1} 
                         min={0} 
-                        max={serviceState.overheadType == 0 ? 1 : undefined} 
-                        value={`${serviceState.overheadValue}`} 
+                        // max={serviceState.overheadType == 0 ? 1 : undefined} 
+                        value={`${serviceState.overheadValue<1.1 && serviceState.overheadType === 0 ? (serviceState.overheadValue * 100).toFixed(2) : serviceState.overheadValue}`} 
                         className={`border-0 bg-slate-100 p-1 text-sm font-light rounded-md ${serviceState.overheadValue == 0 ? "border-2 border-red-300" : ""}`} />
                 </Field>
                 

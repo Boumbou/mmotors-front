@@ -72,7 +72,7 @@ export function ChartPieDonutText({data, title}: {data?: ApplicationType[], titl
   }, [formattedData])
 
   return (
-    <Card className="flex flex-col min-w-50">
+    <Card className="flex flex-col min-w-50 w-full md:w-1/3">
       <CardHeader className="items-center pb-0">
         <CardTitle>{title}</CardTitle>
       </CardHeader>

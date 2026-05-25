@@ -10,8 +10,8 @@ import useStore from "@/routes/auth/userStore";
 import { Badge } from "@/components/ui/badge";
 
 
-export default function DocTemplateForm({template,refreshTemplates, deleteTemplate}: {template?: { id: number; name: string; type: string ;isActive: boolean ;updatedAt: string }, refreshTemplates: () => void, deleteTemplate?: (id: number) => void}) {
-    const [templateState, setTemplateState] = useState<{ id: number; name: string; type: string ;isActive: boolean ;updatedAt: string }|null>(template ||{id: 0, name: "", type: "", isActive: true, updatedAt: ""});
+export default function DocTemplateForm({template,refreshTemplates, deleteTemplate}: {template?: { id: number; name: string; type: number ;isActive: boolean ;updatedAt: string }, refreshTemplates: () => void, deleteTemplate?: (id: number) => void}) {
+    const [templateState, setTemplateState] = useState<{ id: number; name: string; type: number ;isActive: boolean ;updatedAt: string }|null>(template ||{id: 0, name: "", type: 0, isActive: true, updatedAt: ""});
     const user = useStore((state: any) => state.user);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -40,14 +40,14 @@ export default function DocTemplateForm({template,refreshTemplates, deleteTempla
                 Id: template?.id,
                 Name: template?.name,
                 IsActive: template?.isActive ? true : false,
-                Type: parseInt(template?.type || "0", 10)
+                Type: parseInt(template?.type as unknown as string, 10)
             }
         } else {
 
             return {
                 Name: template?.name,
                 IsActive: template?.isActive,
-                Type: parseInt(template?.type || "0", 10)
+                Type: parseInt(template?.type as unknown as string, 10)
             }        
         }
     }

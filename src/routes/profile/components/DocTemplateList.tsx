@@ -10,7 +10,7 @@ import { useState } from "react";
 
 export function DocTemplateList() {
     const user = useStore((state: any) => state.user);
-    const [templates, setTemplates] = useState<{ id: number; name: string; type: string ;isActive: boolean ;updatedAt: string }[]>([]);
+    const [templates, setTemplates] = useState<{ id: number; name: string; type: number ;isActive: boolean ;updatedAt: string }[]>([]);
 
     const fetchTemplates = async () => {
         try {
@@ -63,7 +63,7 @@ export function DocTemplateList() {
                         <HugeiconsIcon icon={Add} className="w-4 h-4" /> Ajouter un service
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="md:min-w-2xl  min-w-90%">
+                <DialogContent className="md:min-w-2xl  min-w-90% max-h-9/10 overflow-auto">
                     <DialogTitle>Service </DialogTitle>
                     <DocTemplateForm  refreshTemplates={fetchTemplates} deleteTemplate={handleDelete} />
                 </DialogContent>
@@ -78,7 +78,7 @@ export function DocTemplateList() {
                                 {template.name}
                             </p>
                             <p className="w-full text-sm font-light text-slate-600">
-                                {template.type}
+                                {template.type === 0 ? "Tout contrat" : template.type === 1 ? "Vente" : "Location"}
                             </p>
                         </div>
                         <div>
@@ -88,7 +88,7 @@ export function DocTemplateList() {
                                         <HugeiconsIcon icon={Edit} className="w-4 h-4" />
                                     </Button>
                                 </DialogTrigger>
-                                <DialogContent className="md:min-w-2xl  min-w-90%">
+                                <DialogContent className="md:min-w-2xl  min-w-90% max-h-9/10 overflow-auto">
                                     <DialogTitle>Modèle </DialogTitle>
                                     <DocTemplateForm template={template} refreshTemplates={fetchTemplates} />
                                 </DialogContent>

@@ -12,7 +12,7 @@ export default function VehicleCard({vehicle, searchParams}: {vehicle: VehicleTy
 
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
             <Card 
-                className="group relative md:w-70 w-95 h-[340px] overflow-hidden rounded-2xl border-0 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                className="group relative md:w-70 w-85 h-[340px] overflow-hidden rounded-2xl border-0 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                 key={vehicle.id}
                 onClick={() => navigate(`/catalogue/vehicle/${vehicle.id}?${searchParams}`,{})}
                 >

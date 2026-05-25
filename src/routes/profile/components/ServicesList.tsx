@@ -45,7 +45,7 @@ export function ServicesList({ services, refreshServices }: { services: ServiceT
                         <HugeiconsIcon icon={Add} className="w-4 h-4" /> Ajouter un service
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="md:min-w-2xl  min-w-90%">
+                <DialogContent className="md:min-w-2xl  min-w-90% max-h-9/10 overflow-auto">
                     <DialogTitle>Service </DialogTitle>
                     <ServiceForm  refreshServices={refreshServices} />
                 </DialogContent>
@@ -70,7 +70,7 @@ export function ServicesList({ services, refreshServices }: { services: ServiceT
                                         <HugeiconsIcon icon={Edit} className="w-4 h-4" />
                                     </Button>
                                 </DialogTrigger>
-                                <DialogContent className="md:min-w-2xl  min-w-90%">
+                                <DialogContent className="md:min-w-2xl  min-w-90% max-h-9/10 overflow-auto">
                                     <DialogTitle>Service </DialogTitle>
                                     <ServiceForm service={service} refreshServices={refreshServices} deleteService={handleDelete} />
                                 </DialogContent>

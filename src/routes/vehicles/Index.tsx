@@ -66,9 +66,9 @@ export default function Vehicles() {
               )}
               {!loading && (
                 <>
-                  <ToggleGroup onValueChange={handleToggleChange} type="single" className="bg-transparent  p-1 my-4" defaultValue={transactionType}>
-                    <ToggleGroupItem value="achats" className="data-[state=on]:bg-blue-500 data-[state=on]:text-white px-3 py-1 rounded-md">Achats</ToggleGroupItem>
-                    <ToggleGroupItem value="locations" className="data-[state=on]:bg-blue-500 data-[state=on]:text-white px-3 py-1 rounded-md">Locations</ToggleGroupItem>
+                  <ToggleGroup onValueChange={handleToggleChange} type="single" className="bg-transparent mx-0  p-0 my-4" defaultValue={transactionType}>
+                    <ToggleGroupItem value="achats" className="data-[state=on]:bg-black data-[state=on]:text-white px-3 py-1 rounded-md">Achats</ToggleGroupItem>
+                    <ToggleGroupItem value="locations" className="data-[state=on]:bg-black data-[state=on]:text-white px-3 py-1 rounded-md">Locations</ToggleGroupItem>
                   </ToggleGroup>
                   
                   <div className="flex flex-row flex-wrap md:justify-start justify-center gap-5 w-full">

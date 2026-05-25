@@ -31,6 +31,7 @@ export default function VehicleDetails() {
             }
             const data = await response.json();
             setVehicle(data);
+            return data.listingType;
         } catch (err: any) {
             setError(err.message);
             throw err;
@@ -39,11 +40,11 @@ export default function VehicleDetails() {
         }
     }
     
-    const fetchAvailableServices = async () => {
-        const currentListingType = location.search.search("achats") !== -1 ? 0 : 1;
+    const fetchAvailableServices = async (listingType: number) => {
+        
 
         try {
-            const response = await fetch(`/api/services?listingType=${currentListingType}`);
+            const response = await fetch(`/api/services?listingType=${listingType}`);
             if (!response.ok) {
                 throw new Error("Failed to fetch available services");
             }
@@ -76,10 +77,10 @@ export default function VehicleDetails() {
 
     useEffect(() => {
         const getVehiclesAndServices = async () => {
-            await fetchVehicleDetails(currentVehicleId);
+            const listingType = await fetchVehicleDetails(currentVehicleId);
             if(user?.roles.includes("Customer")) {
                 await checkIfApplied();
-                await fetchAvailableServices();
+                await fetchAvailableServices(listingType);
             }
         }
         getVehiclesAndServices();
