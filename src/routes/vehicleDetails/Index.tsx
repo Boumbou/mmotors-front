@@ -112,12 +112,12 @@ export default function VehicleDetails() {
             // <div className="flex flex-col gap-5 md:mx-30 mx-5 md:justify-start justify-center mt-10">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} >
 
-                <div className="flex flex-col gap-5">
+                <div className="flex flex-col gap-5 mx-4 md:mx-0">
                 
                     <Breadcrumb>
                         <BreadcrumbList>
                         <BreadcrumbItem>
-                            <BreadcrumbLink href={"/catalogue"+location.search}>Catalogue</BreadcrumbLink>
+                            <BreadcrumbLink onClick={()=>navigate("/catalogue"+location.search)}> Catalogue</BreadcrumbLink>
                         </BreadcrumbItem>
                         <BreadcrumbSeparator />
                         <BreadcrumbItem>
@@ -128,7 +128,7 @@ export default function VehicleDetails() {
                     <h1 className="text-4xl">{vehicle.brand} {vehicle.model} {vehicle.year}</h1>
                     <div className="flex flex-row flex-wrap min-w-full gap-5">
                         <div className=" md:min-100 md:max-w-150 basis-full rounded-lg bg-white">
-                            <img src={vehicle.imageUrl ? `${import.meta.env.VITE_API_URL}${vehicle.imageUrl.replace("wwwroot", "")}` : "/NoPicture.png"} alt={`${vehicle.brand} ${vehicle.model}`} className="w-auto h-full rounded-lg object-cover"/>
+                            <img src={vehicle.imageUrl ?? "/NoPicture.png"} alt={`${vehicle.brand} ${vehicle.model}`} className="w-auto h-full rounded-lg object-cover"/>
                         </div>
                         {/* display application option for customer only */}
                         {(user?.roles.includes("Customer") || !user) && (

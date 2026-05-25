@@ -29,7 +29,7 @@ export function LoginForm({
 
   return (
     <div className={cn("flex basis-full flex-col gap-6 md:min-w-100", className)} {...props}>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} className="w-full">
         <FieldGroup>
           <div className="flex flex-col items-center gap-2 text-center">
             <a
@@ -43,7 +43,7 @@ export function LoginForm({
             </a>
             <h1 className="text-xl font-bold">Bienvenue chez MMotors</h1>
             <FieldDescription>
-              Pas encore inscrit ? <Button variant="link" onClick={() => navigate("/auth/register", { state: { from: destination } })}>Inscrivez-vous</Button>
+              Pas encore inscrit ? <Button type="button" variant="link" onClick={() => navigate("/auth/register", { state: { from: destination } })}>Inscrivez-vous</Button>
             </FieldDescription>
           </div>
           <Field>

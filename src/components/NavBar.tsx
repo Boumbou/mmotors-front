@@ -12,7 +12,7 @@ export default function NavBar() {
     const navigate = useNavigate();
 
     return (
-        <div className="flex p-10 items-center justify-between gap-10 flex-row h-10 w-full sticky z-50 top-0 bg-background ">
+        <div className="flex py-10 md:px-20 px-4 items-center justify-between gap-10 flex-row h-10 w-full sticky z-50 top-0 bg-background ">
             <Link to="/"><img src="/MMotorsLogo.png" alt="MMotors logo" className="h-8"/></Link>
             <ul className="flex flex-row gap-5">
                 {/* <NavLink to="/catalogue?type=achats&pagenumber=1&pagesize=1" className={(isActive) => isActive ? "text-blue-500" : "text-black"}>Acheter</NavLink>

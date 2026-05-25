@@ -4,14 +4,14 @@ import { Card, CardAction, CardContent, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import useStore from "@/routes/auth/userStore"
 import { ApplicationStatus, type ApplicationType } from "@/types/ApplicationType";
-import type { PagedResult } from "@/types/PagedResult";
 import type { User } from "@/types/UserType";
-import { Trash, Warning } from "@hugeicons/core-free-icons";
+import { Trash2, Warning } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
+import { Badge } from "@/components/ui/badge";
 
-export default function CustomerProfile({ applications, pagedResult, changeSectionCallBack }: { applications: ApplicationType[], pagedResult: PagedResult, changeSectionCallBack: (section: string) => void }) {
+export default function CustomerProfile({ applications, changeSectionCallBack }: { applications: ApplicationType[], changeSectionCallBack: (section: string) => void }) {
     const user: User | null = useStore((state: any) => state.user)
     const navigate = useNavigate();
     const ongoingApplications = applications.filter(app => app.status === ApplicationStatus.Submitted).length;
@@ -76,7 +76,7 @@ export default function CustomerProfile({ applications, pagedResult, changeSecti
                             Notre équipe se chargera de traiter votre demande dans les plus brefs délais."
                             OnDeleteApplication={()=>window.location.href = "mailto:accountsupport@mmotors.com"}
                             >
-                            <Button variant="destructive" size="lg" className="w-full" ><HugeiconsIcon icon={Trash} />Supprimer mon compte</Button>
+                            <Badge variant="destructive"  className="w-full h-8 rounded-lg hover:bg-red-200" ><HugeiconsIcon icon={Trash2} />Supprimer mon compte</Badge>
                         </DeleteDialog>
                     </div>
             </div>

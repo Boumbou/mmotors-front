@@ -1,6 +1,6 @@
 import {Card, CardAction, CardContent, CardHeader, CardTitle} from "../../../components/ui/card";
 import {HugeiconsIcon} from "@hugeicons/react";
-import { Car, Car01Icon, Check, CheckCircle, Close, Download, File01Icon, Mail, Money, Pause, Send, Trash2, ValidationApprovalIcon} from "@hugeicons/core-free-icons";
+import { Car, Car01Icon, CheckCircle, Close, Download, Mail, Money, Pause, Send, Trash2, ValidationApprovalIcon} from "@hugeicons/core-free-icons";
 import {Separator} from "../../../components/ui/separator";
 import {Button} from "../../../components/ui/button";
 import type { VehicleType } from "@/types/VehicleType";
@@ -15,7 +15,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { DeleteDialog } from "@/components/DeleteDialog";
 import type { User } from "@/types/UserType";
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 
 export default function ApplicationManagement(
     { vehicle, application, motorizationLabels }:
@@ -93,40 +92,52 @@ export default function ApplicationManagement(
         toast.success("Dossier mis en attente avec succès");
     }
 
-    const onFileChange = (event: React.ChangeEvent<HTMLInputElement>, documentId: number) => {
+    const onFileChange = async (event: React.ChangeEvent<HTMLInputElement>, documentId: number) => {
         const file = event.target.files?.[0];
+        console.log("Selected file: ", file?.name);
+        
         if (!file) return;
         // call api to upload the file for the document with id documentId
         const formData = new FormData();
         formData.append("document", file);
         formData.append("id", documentId.toString());
         setLoading(true);
-        fetch(`/api/documents/upload`, {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${user.token}`
-            },
-            body: formData
-        }).catch((error) => {
+        try{
+            const response = await fetch(`/api/documents/upload`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${user.token}`
+                },
+                body: formData
+            });
+
+            if (!response.ok) { 
+                toast.error("Une erreur est survenue lors du téléchargement du document. Veuillez réessayer.");               
+                throw new Error("Une erreur est survenue lors du téléchargement du document. Veuillez réessayer.");
+            }
+
+
+            console.log("response from upload api: ", response);
+            //update document state
+            setAppDocuments((prevDocuments: any) => prevDocuments.map((doc: any) => {
+                if (doc.id === documentId) {
+                    return { ...doc, url: URL.createObjectURL(file) };
+                }
+                return doc;
+            }));
+            console.log("Updated documents state: ", appDocuments);
+            toast.success("Document téléchargé avec succès");
+        } catch (error) {
             toast.error("Une erreur est survenue lors du téléchargement du document. Veuillez réessayer.");
             throw error;
-        }).finally(() => {
+        } finally {
             setLoading(false);
-        });
-        //update document state
-        setAppDocuments((prevDocuments: any) => prevDocuments.map((doc: any) => {
-            if (doc.id === documentId) {
-                return { ...doc, url: URL.createObjectURL(file) };
-            }
-            return doc;
-        }));
-
-        toast.success("Document téléchargé avec succès");
+        }
     }
 
     const onDownloadDocument = (key: string) => {
         //call download api endpoint
-        fetch(`/api/documents/download/${key}`, {
+        fetch(`/api/documents/download?key=${key}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${user.token}`

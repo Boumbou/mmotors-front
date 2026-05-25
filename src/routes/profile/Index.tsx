@@ -70,17 +70,17 @@ export default function Profile() {
                 <p className="text-lg font-medium text-gray-700">Chargement...</p>
             </div>}
             {!loading &&(
-                <Tabs defaultValue={isStaff ? "dashboard" : "profile"} value={selectedSection} className="self-center max-w-2xl w-full">
-                    <TabsList className="bg-slate-200 p-2 rounded-md mb-4">
+                <Tabs defaultValue={isStaff ? "dashboard" : "profile"} value={selectedSection} className="self-center max-w-2xl w-full ">
+                    <TabsList className="bg-slate-200 p-2 flex flex-row flex-wrap gap-2 rounded-md mb-4 overflow-scroll sm:min-h-10  min-h-20">
                         {sections?.map((section) => (
-                            <TabsTrigger onClick={()=>handleSectionChange(section.value)} key={section.value} value={section.value} className="px-4 py-2 rounded-md data-[state=active]:bg-slate-300">
+                            <TabsTrigger onClick={()=>handleSectionChange(section.value)} key={section.value} value={section.value} className="px-4 py-2 max-h-6 rounded-md data-[state=active]:bg-slate-300">
                                 {section.icon}
                                 {section.title}
                             </TabsTrigger>
                         ))}
                     </TabsList>
                     <TabsContent value="profile">
-                            <CustomerProfile applications={applications} pagedResult={result!}  changeSectionCallBack={handleSectionChange} />
+                            <CustomerProfile applications={applications}  changeSectionCallBack={handleSectionChange} />
                     </TabsContent>
                     <TabsContent value="dashboard">
                         <Dashboard applications={applications} pagedResult={result!} />

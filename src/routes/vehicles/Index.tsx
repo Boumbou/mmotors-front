@@ -1,20 +1,12 @@
-import {  listingTypeLabels, motorizationLabels, type VehicleListResponse } from "@/types/VehicleType";
-import { Link, useSearchParams } from "react-router"
+import {  type VehicleListResponse } from "@/types/VehicleType";
+import { useSearchParams } from "react-router"
 
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+
 import { useEffect, useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import MmotorsPagination from "@/components/pagination/MmotorsPagination";
 import VehicleCard from "./components/VehicleCard";
+import VehicleListSkeleton from "./components/VehicleListSkeleton";
 
 export default function Vehicles() {
     //get last url section to determine if we are in achats or locations
@@ -62,27 +54,30 @@ export default function Vehicles() {
 
     return (
       <>
-        <div className="flex min-h-80% justify-start p-6 mx-30">
-          <div className="flex min-w-80 flex-col gap-4 text-sm leading-loose">
+        <div className="flex min-h-80% justify-start py-6 md:mx-30 mx-0">
+          <div className="flex w-full flex-col gap-4 text-sm leading-loose">
             <div>
-              <h1 className="font-medium text-4xl">Vehicles</h1>
+              <h1 className="font-medium text-4xl">Nos véhicules</h1>
             </div>
             <div>
               {/* wrap cards in a flex row with gap and make them responsive with min width */}
               {loading && (
-                <p className="text-center w-full">Loading...</p>
+                <VehicleListSkeleton />
               )}
-              <ToggleGroup onValueChange={handleToggleChange} type="single" className="bg-transparent  p-1 my-4" defaultValue={transactionType}>
-                <ToggleGroupItem value="achats" className="data-[state=on]:bg-blue-500 data-[state=on]:text-white px-3 py-1 rounded-md">Achats</ToggleGroupItem>
-                <ToggleGroupItem value="locations" className="data-[state=on]:bg-blue-500 data-[state=on]:text-white px-3 py-1 rounded-md">Locations</ToggleGroupItem>
-              </ToggleGroup>
-              <div className="flex flex-row flex-wrap gap-5 w-full">
-
-                {vehiclesResponse.items.length>0 && vehiclesResponse.items.map((vehicle) => (
-                  <VehicleCard key={vehicle.id} vehicle={vehicle} searchParams={searchParams.toString()} />
+              {!loading && (
+                <>
+                  <ToggleGroup onValueChange={handleToggleChange} type="single" className="bg-transparent  p-1 my-4" defaultValue={transactionType}>
+                    <ToggleGroupItem value="achats" className="data-[state=on]:bg-blue-500 data-[state=on]:text-white px-3 py-1 rounded-md">Achats</ToggleGroupItem>
+                    <ToggleGroupItem value="locations" className="data-[state=on]:bg-blue-500 data-[state=on]:text-white px-3 py-1 rounded-md">Locations</ToggleGroupItem>
+                  </ToggleGroup>
                   
-                ))}
-              </div>
+                  <div className="flex flex-row flex-wrap md:justify-start justify-center gap-5 w-full">
+                    {vehiclesResponse.items.length>0 && vehiclesResponse.items.map((vehicle) => (
+                      <VehicleCard key={vehicle.id} vehicle={vehicle} searchParams={searchParams.toString()} />
+                    ))}
+                  </div>
+                </>
+              )}
               {vehiclesResponse.items.length == 0 && !loading && (
                 <img src="/NoResult.png" alt="No results" className="w-full h-100 object-cover rounded-none mask-x-from-70% mask-x-to-90% mask-y-from-70% mask-y-to-90%" />
               )}

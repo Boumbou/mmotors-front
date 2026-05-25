@@ -8,7 +8,7 @@ export default function Layout() {
     <div className={`flex min-h-svh ${window.location.pathname !== "/" ? "bg-slate-100" : ""} flex-col`}>
         <NavBar />
         <Toaster position="top-center" richColors />
-        <div className="flex flex-col gap-5 md:mx-30 mx-5 md:justify-start justify-center my-10">
+        <div className="flex flex-col gap-5 md:mx-30 md:mx-5 mx-2 md:justify-start justify-center my-10">
           <Outlet />
         </div>
     </div>

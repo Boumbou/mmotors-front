@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Edit, Edit01Icon, Trash2 } from "@hugeicons/core-free-icons";
+import { Edit01Icon, Trash2 } from "@hugeicons/core-free-icons";
 import { listingTypeLabels, type VehicleType } from "@/types/VehicleType";
 import { useNavigate } from "react-router";
 import { DeleteDialog } from "@/components/DeleteDialog";
@@ -16,7 +16,6 @@ export default function ManagementTable({ vehicles, columns }: { vehicles: Vehic
     if(user?.roles.includes("Customer")) {
         throw new Error("Non autorisé");
     }
-
     const openVehicleSettings = (vehicleId: number) => {
         // Implement the logic to open the vehicle settings page
         // For example, you can use React Router's useNavigate hook to navigate to the settings page
@@ -63,20 +62,21 @@ export default function ManagementTable({ vehicles, columns }: { vehicles: Vehic
                 {vehicles.map((vehicle : VehicleType) => (
                     <TableRow key={vehicle.id}>
                         {
+                        
                             columns.map((column) => (
-                                
+                                console.log(vehicle[column.accessor]),
+                                console.log(vehicle.listingType),
                                 <TableCell key={column.header}>
                                     <div>
-                                        {vehicle[column.accessor] || (column.accessor === "listingType" ? listingTypeLabels[vehicle.listingType] : "")}
+                                        {
+                                         column.header === "Type"?
+                                            listingTypeLabels[vehicle.listingType as keyof typeof listingTypeLabels] :
+                                        vehicle[column.accessor] }
                                     </div>
                                 </TableCell>
                             ))
                         }
-                        {/* <TableCell className="font-medium">{vehicle.brand}</TableCell>
-                        <TableCell>{vehicle.model}</TableCell>
-                        <TableCell>{vehicle.year}</TableCell>
-                        <TableCell>{vehicle.listedAmount} €</TableCell>
-                        <TableCell>{listingTypeLabels[vehicle.listingType]}</TableCell> */}
+
                         <TableCell className="text-center items-center">
                             {/* Add action buttons here */}
                             <Button onClick={() => openVehicleSettings(vehicle.id)} variant="outline" size="sm" className="mr-2">

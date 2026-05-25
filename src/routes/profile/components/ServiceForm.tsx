@@ -17,8 +17,18 @@ export default function ServiceForm({service,refreshServices, deleteService}: {s
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { value, name, type } = event.target;
+
         const evevalue = type === "checkbox" ? (event.target as HTMLInputElement).checked : value;
         
+        //check if from select and if true parse to int 
+        if (["listingType", "overheadType", "overheadValue"].includes(name)) {
+            setServiceState((prevState) => ({
+                ...prevState,
+                [name]: parseInt(evevalue as string),
+            } as ServiceType));
+            return;
+        }
+
         setServiceState((prevState) => ({
             ...prevState,
             [name]: evevalue,

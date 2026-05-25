@@ -12,12 +12,12 @@ export default function VehicleCard({vehicle, searchParams}: {vehicle: VehicleTy
 
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
             <Card 
-                className="group relative w-80 h-[340px] overflow-hidden rounded-2xl border-0 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                className="group relative md:w-70 w-95 h-[340px] overflow-hidden rounded-2xl border-0 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                 key={vehicle.id}
                 onClick={() => navigate(`/catalogue/vehicle/${vehicle.id}?${searchParams}`,{})}
                 >
                 <img
-                    src={vehicle.imageUrl ? `${import.meta.env.VITE_API_URL}${vehicle.imageUrl.replace("wwwroot", "")}` : "/NoPicture.png"}
+                    src={vehicle.imageUrl ?? "/NoPicture.png"}
                     alt={`${vehicle.brand} ${vehicle.model}`}
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />

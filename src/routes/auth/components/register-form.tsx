@@ -10,16 +10,19 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { useState, type SyntheticEvent } from "react"
+import { useNavigate } from "react-router"
 
 export function RegisterForm({
   className,
   handleSubmit,
+  destination,
   ...props
-}: React.ComponentProps<"div"> & { handleSubmit: (email: string, password: string, name: string, lastName: string) => void }) {
+}: React.ComponentProps<"div"> & { handleSubmit: (email: string, password: string, name: string, lastName: string) => void, destination: string }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
+  const navigate = useNavigate();
   
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -43,7 +46,7 @@ export function RegisterForm({
             </a>
             <h1 className="text-xl font-bold">Bienvenue chez MMotors</h1>
             <FieldDescription>
-              Déjà inscrit ? <a href="/auth/login">Connectez-vous</a>
+              Déjà inscrit ? <Button type="button" variant="link" onClick={() => navigate("/auth/login", { state: { from: destination } })}>Connectez-vous</Button>
             </FieldDescription>
           </div>
           <Field>

@@ -2,7 +2,6 @@ import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { BrowserRouter, Route, Routes } from "react-router"
 import "./index.css"
-import { ThemeProvider } from "@/components/theme-provider.tsx"
 import Layout from "./routes/Layout.tsx"
 import Home from "./routes/Index.tsx"
 import Profile from "./routes/profile/Index.tsx"
@@ -17,7 +16,7 @@ import VehicleSettings from "./routes/vehicleDetails/VehicleSettings.tsx"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider>
+    {/* <ThemeProvider> */}
       <BrowserRouter>
         <Routes>
           //home and about routes
@@ -55,6 +54,6 @@ createRoot(document.getElementById("root")!).render(
 
         </Routes>
       </BrowserRouter>
-    </ThemeProvider>
+    {/* </ThemeProvider> */}
   </StrictMode>
 )

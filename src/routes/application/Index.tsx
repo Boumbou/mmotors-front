@@ -156,11 +156,11 @@ export default function Application() {
                     {location.state?.search ? (
                         <>
                             <BreadcrumbItem>
-                                <BreadcrumbLink href={"/catalogue"+(location.state?.search || "")}>Catalogue</BreadcrumbLink>
+                                <BreadcrumbLink onClick={() => navigate("/catalogue"+(location.state?.search || ""))}>Catalogue</BreadcrumbLink>
                             </BreadcrumbItem>
                             <BreadcrumbSeparator />
                             <BreadcrumbItem>
-                                <BreadcrumbLink href={`/catalogue/vehicle/${vehicle?.id}${location.state?.search || ""}`} >{vehicle ? `${vehicle.brand} ${vehicle.model}` : "Détails du véhicule"}</BreadcrumbLink>
+                                <BreadcrumbLink onClick={() => navigate(`/catalogue/vehicle/${vehicle?.id}${location.state?.search || ""}`)}>{vehicle ? `${vehicle.brand} ${vehicle.model}` : "Détails du véhicule"}</BreadcrumbLink>
                             </BreadcrumbItem>
                         </>
                     ) : (

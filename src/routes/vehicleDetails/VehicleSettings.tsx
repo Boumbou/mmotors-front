@@ -64,7 +64,12 @@ export default function VehicleSettings() {
     const updateVehicleDetails = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLButtonElement>) => {
         const { name, value } = event.target;
         // keep track of each field changes and setVehicleDetails to be ready to put
-        if (name === "listingType" || name === "motorization" || name === "status" || name === "rentalTermMonths") {
+        if (
+            name === "listingType" || 
+            name === "motorization" || 
+            name === "status" || 
+            name === "rentalTermMonths" 
+        ) {
             setVehicleDetails({
                 ...vehicleDetails,
                 [name]: parseInt(value)
@@ -408,7 +413,7 @@ export default function VehicleSettings() {
                                                 <DialogTrigger asChild>
                                                     <Link to="#" className="w-32 h-32 max-w-full object-cover rounded-md mr-4">
                                                         <img 
-                                                            src={vehicleDetails?.imageUrl ? `${import.meta.env.VITE_API_URL}${vehicleDetails.imageUrl.replace("wwwroot", "")}` : "/NoPicture.png"}
+                                                            src={vehicleDetails?.imageUrl ?? "/NoPicture.png"}
                                                             alt={vehicleDetails?.model || "Vehicle"} 
                                                             className="w-full h-full object-cover rounded-md mr-4" 
                                                         />
@@ -419,9 +424,7 @@ export default function VehicleSettings() {
                                                     {/* add here the full size image */}
 
                                                     <img src={
-                                                        vehicleDetails?.imageUrl ?
-                                                        `${import.meta.env.VITE_API_URL}${vehicleDetails?.imageUrl?.replace("wwwroot", "")}` : 
-                                                        "/NoPicture.png"} 
+                                                        vehicleDetails?.imageUrl ?? "/NoPicture.png"} 
                                                         alt={vehicleDetails?.model || "Vehicle"} className="w-full object-cover rounded-md" />
                                                 </DialogContent>   
                                             </Dialog>

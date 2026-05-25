@@ -1,11 +1,12 @@
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import useStore  from "./userStore";
 import { RegisterForm } from "@/routes/auth/components/register-form";
 
 export default function Register() {
   const register = useStore((state: any) => state.register);
   const navigate = useNavigate();
-  const destinationPage = "/profile";
+  const location = useLocation();
+  const destinationPage = location.state?.from || "/profile";
   
   const handleRegister = async (email: string, password: string, name: string, lastName: string) => {
     try {
@@ -25,8 +26,8 @@ export default function Register() {
 
 
   return (
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <RegisterForm handleSubmit={handleRegister} />
+      <div className="flex max-w-md min-w-full flex-col gap-4 text-sm leading-loose">
+        <RegisterForm handleSubmit={handleRegister} destination={destinationPage} />
       </div>
   )
 }
