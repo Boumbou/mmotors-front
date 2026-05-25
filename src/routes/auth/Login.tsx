@@ -33,7 +33,7 @@ export default function Login() {
   }
 
   return (
-      <div className="flex max-w-md min-w-full flex-col gap-4 text-sm leading-loose">
+      <div className="flex max-w-md flex-col gap-4 text-sm leading-loose">
         <LoginForm handleLogin={handleLogin} destination={previousPage} />
         {loading && <p>Connexion en cours...</p>}
       </div>

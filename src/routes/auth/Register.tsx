@@ -26,7 +26,7 @@ export default function Register() {
 
 
   return (
-      <div className="flex max-w-md min-w-full flex-col gap-4 text-sm leading-loose">
+      <div className="flex max-w-md min-w-full flex-col gap-4 text-sm leading-loose mb-30">
         <RegisterForm handleSubmit={handleRegister} destination={destinationPage} />
       </div>
   )

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 export default function AuthLayout() {
   return (
     <div className="flex mx-2 justify-center items-start min-h-svh bg-white pt-30">
-        <div className="w-full">
+        <div className="flex flex-col gap-4 w-full md:w-md">
             <Button variant="ghost" className="text-slate-500">
                 <Link to="/">&lt;&lt; Retour à l'accueil</Link>
             </Button>
