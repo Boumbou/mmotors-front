@@ -52,9 +52,7 @@ export default function Application() {
         try {
             setError(null);
             const response = await fetch(`/api/applications/${id}`, {
-                headers: {
-                    "Authorization": `Bearer ${user.token}`
-                }
+                credentials: "include"
             });
             if (!response.ok) {
                 throw new Error("Failed to fetch application details");
@@ -116,8 +114,8 @@ export default function Application() {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${user.token}`
                 },
+                credentials: "include",
                 body: JSON.stringify(applicationData)
             });
             

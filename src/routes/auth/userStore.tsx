@@ -9,14 +9,14 @@ type UserStore = {
     logout: () => void;
 };
 
-function parseTokenRoles(token: string): string[] {
-  const payload = JSON.parse(atob(token.split(".")[1]));
-  const rawRoles =
-    payload.role ||
-    payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
-    [];
-  return Array.isArray(rawRoles) ? rawRoles : [rawRoles];
-}
+// function parseTokenRoles(token: string): string[] {
+//   const payload = JSON.parse(atob(token.split(".")[1]));
+//   const rawRoles =
+//     payload.role ||
+//     payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
+//     [];
+//   return Array.isArray(rawRoles) ? rawRoles : [rawRoles];
+// }
 
 const loginRequest = async (email: string, password: string): Promise<User> => {
     const response = await fetch('/api/account/login', {
@@ -30,18 +30,28 @@ const loginRequest = async (email: string, password: string): Promise<User> => {
     if (!response.result.succeeded){
         return Promise.reject(new Error("Oops nous n'avons pas pu vous connecter, veuillez vérifier vos identifiants et réessayer."));
     }
-    const { user, token } = response;
+    const { user, roles } = response;
     const userData: User = {
         id: user.id,
         created: user.created,
         email: user.email,
         name: user.name,
         lastName: user.lastName,
-        roles: parseTokenRoles(token),
-        token: token,
+        roles: roles
     };
     return userData;
 }
+
+const logoutRequest = async (): Promise<void> => {
+    const response = await fetch('/api/account/logout', {
+        method: 'POST',
+        credentials: 'include',
+    });
+    if (!response.ok) {
+        return Promise.reject(new Error("Erreur lors de la déconnexion"));
+    }
+
+};
 
 const registerRequest = async (email: string, password: string, name: string, lastName: string): Promise<User> => {
     const response = await fetch('/api/account/register', {
@@ -54,15 +64,14 @@ const registerRequest = async (email: string, password: string, name: string, la
     if (!response?.result?.succeeded) {
         return Promise.reject(new Error("Oops nous n'avons pas pu vous inscrire, veuillez vérifier vos informations et réessayer."));
     }
-    const { user, token } = response;
+    const { user, roles } = response;
     const userData: User = {
         id: user.id,
         created: user.created,
         email: user.email,
         name: user.name,
         lastName: user.lastName,
-        roles: parseTokenRoles(token),
-        token: token,
+        roles: roles
     };
     return userData;
 }
@@ -91,7 +100,10 @@ const useStore = create<UserStore>()(
 
                 return "Connexion réussie";
             },
-            logout: () => set({ user: null }),
+            logout: async() => {
+                await logoutRequest();
+                set({ user: null });
+                return "Déconnexion réussie";},
         }),
         {
             name: 'user-storage',

@@ -105,9 +105,7 @@ export default function VehicleSettings() {
 
             await fetch(`/api/vehicles/${vehicleId}`, {
                 method: "DELETE",
-                headers: {
-                    "Authorization": `Bearer ${user?.token}`,
-                },
+                credentials: "include"
             });
         } catch (error) {
             toast.error("Erreur lors de la suppression du véhicule");
@@ -148,9 +146,7 @@ export default function VehicleSettings() {
             try {
                 const response = await fetch(isCreate ? "/api/vehicles" : `/api/vehicles/${vehicleId}`, {
                     method: isCreate ? "POST" : "PUT",
-                    headers: {
-                        "Authorization": `Bearer ${user?.token}`,
-                    },
+                    credentials: "include",
                     body: formData,
                 });
 

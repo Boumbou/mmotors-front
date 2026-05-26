@@ -28,9 +28,7 @@ export default function ManagementTable({ vehicles, columns }: { vehicles: Vehic
 
             await fetch(`/api/vehicles/${vehicleId}`, {
                 method: "DELETE",
-                headers: {
-                    "Authorization": `Bearer ${user?.token}`,
-                },
+                credentials: "include",
             });
         } catch (error) {
             toast.error("Erreur lors de la suppression du véhicule");

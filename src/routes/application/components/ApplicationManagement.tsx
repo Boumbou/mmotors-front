@@ -36,8 +36,8 @@ export default function ApplicationManagement(
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${user.token}`
-            }
+            },
+            credentials: "include"
         }).catch((error) => {
             toast.error("Une erreur est survenue lors de la suppression du dossier. Veuillez réessayer.");
             throw error;
@@ -62,8 +62,8 @@ export default function ApplicationManagement(
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${user.token}`
-            }
+            },
+            credentials: "include"
         }).catch((error) => {
             toast.error("Une erreur est survenue lors de la soumission du dossier. Veuillez réessayer.");
             throw error;
@@ -80,8 +80,8 @@ export default function ApplicationManagement(
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${user.token}`
-            }
+            },
+            credentials: "include"
         }).catch((error) => {
             toast.error(error.message || "Une erreur est survenue lors de la mise en attente du dossier. Veuillez réessayer.");
             throw error;
@@ -105,9 +105,7 @@ export default function ApplicationManagement(
         try{
             const response = await fetch(`/api/documents/upload`, {
                 method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${user.token}`
-                },
+                credentials: "include",
                 body: formData
             });
 
@@ -139,9 +137,7 @@ export default function ApplicationManagement(
         //call download api endpoint
         fetch(`/api/documents/download?key=${key}`, {
             method: "GET",
-            headers: {
-                "Authorization": `Bearer ${user.token}`
-            }
+            credentials: "include"
         }).then((response) => {
             if (!response.ok) {
                 throw new Error("Une erreur est survenue lors du téléchargement du document. Veuillez réessayer.");
@@ -163,9 +159,7 @@ export default function ApplicationManagement(
     const onDeleteDocument = (id: number) => {
         fetch(`/api/documents/${id}`, {
             method: "DELETE",
-            headers: {
-                "Authorization": `Bearer ${user.token}`
-            }
+            credentials: "include"
         }).catch((error) => {
             toast.error("Nous n'avons pas pu supprimer le document. Veuillez réessayer plus tard.");
             throw error;
@@ -185,8 +179,8 @@ export default function ApplicationManagement(
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${user.token}`
             },
+            credentials: "include",
             body: JSON.stringify(decision)
         }).catch((error) => {
             toast.error(error.message || "Une erreur est survenue lors de la revue du dossier. Veuillez réessayer.");
