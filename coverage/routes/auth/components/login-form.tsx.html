@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -162,18 +162,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">54x</span>
+<span class="cline-any cline-yes">54x</span>
+<span class="cline-any cline-yes">54x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">54x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">54x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -187,7 +185,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -197,7 +197,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">32x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -208,7 +208,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -235,22 +235,22 @@ import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import { useNavigate } from "react-router"
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >LoginForm({</span>
+export function LoginForm({
   className,
   handleLogin,
   destination,
   ...props
 }: React.ComponentProps&lt;"div"&gt; &amp; { handleLogin: (email: string, password: string) =&gt; void , destination: string }) {
-  const [email, setEmail<span class="cstat-no" title="statement not covered" >] = useState("");</span>
-  const [password, setPassword<span class="cstat-no" title="statement not covered" >] = useState("");</span>
-  const <span class="cstat-no" title="statement not covered" >navigate = useNavigate();</span>
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 &nbsp;
-  const onSubmit = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>: React.FormEvent) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    e.preventDefault();</span>
-<span class="cstat-no" title="statement not covered" >    handleLogin(email, password);</span>
+  const onSubmit = (e: React.FormEvent) =&gt; {
+    e.preventDefault();
+    handleLogin(email, password);
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;div className={cn("flex basis-full flex-col gap-6 md:min-w-100", className)} {...props}&gt;
       &lt;form onSubmit={onSubmit} className="w-full"&gt;
         &lt;FieldGroup&gt;
@@ -266,7 +266,7 @@ export function <span class="fstat-no" title="function not covered" >LoginForm({
             &lt;/a&gt;
             &lt;h1 className="text-xl font-bold"&gt;Bienvenue chez MMotors&lt;/h1&gt;
             &lt;FieldDescription&gt;
-              Pas encore inscrit ? &lt;Button type="button" variant="link" onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >n</span>avigate("/auth/register", { state: { from: destination } })}&gt;I</span>nscrivez-vous&lt;/Button&gt;
+              Pas encore inscrit ? &lt;Button type="button" variant="link" onClick={() =&gt; navigate("/auth/register", { state: { from: destination } })}&gt;Inscrivez-vous&lt;/Button&gt;
             &lt;/FieldDescription&gt;
           &lt;/div&gt;
           &lt;Field&gt;
@@ -276,7 +276,7 @@ export function <span class="fstat-no" title="function not covered" >LoginForm({
               type="email"
               placeholder="m@exemple.com"
               value={email}
-              onChange={<span class="fstat-no" title="function not covered" >(e</span>) =&gt; <span class="cstat-no" title="statement not covered" >setEmail(e.target.value)}</span>
+              onChange={(e) =&gt; setEmail(e.target.value)}
               // required
             /&gt;
           &lt;/Field&gt;
@@ -287,7 +287,7 @@ export function <span class="fstat-no" title="function not covered" >LoginForm({
               type="password"
               placeholder="saisissez votre mot de passe"
               value={password}
-              onChange={<span class="fstat-no" title="function not covered" >(e</span>) =&gt; <span class="cstat-no" title="statement not covered" >setPassword(e.target.value)}</span>
+              onChange={(e) =&gt; setPassword(e.target.value)}
               // required
             /&gt;
           &lt;/Field&gt;
@@ -307,7 +307,7 @@ export function <span class="fstat-no" title="function not covered" >LoginForm({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-13T10:20:51.769Z
+                at 2026-06-13T11:18:23.962Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

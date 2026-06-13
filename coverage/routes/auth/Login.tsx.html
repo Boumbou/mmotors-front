@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">88.88% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>16/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>5/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">88.23% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>15/17</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -109,35 +109,35 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -148,36 +148,36 @@ import useStore from "./userStore";
 import { LoginForm } from "@/routes/auth/components/login-form";
 import { useState } from "react";
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >Login() {</span>
-  const <span class="cstat-no" title="statement not covered" >login = useStore(<span class="fstat-no" title="function not covered" >(s</span>tate: any) =&gt; <span class="cstat-no" title="statement not covered" >state.login)</span>;</span>
-  const <span class="cstat-no" title="statement not covered" >location = useLocation();</span>
+export default function Login() {
+  const login = useStore((state: any) =&gt; state.login);
+  const location = useLocation();
   // récupérer la dernière page visitée
-  const previousPage = <span class="cstat-no" title="statement not covered" >location.state?.from || "/profile";</span>
-  const <span class="cstat-no" title="statement not covered" >navigate = useNavigate();</span>
-  const [loading, setLoading<span class="cstat-no" title="statement not covered" >] = useState(false);</span>
+  const previousPage = location.state?.from || "/profile";
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 &nbsp;
-  const handleLogin = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async (e</span>mail: string, password: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setLoading(true);</span>
-<span class="cstat-no" title="statement not covered" >    try {</span>
-      const response = <span class="cstat-no" title="statement not covered" >await login(email, password).catch(<span class="fstat-no" title="function not covered" >(e</span>rror: Error) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        throw new Error(`Erreur lors de la connexion : ${error.message}`);</span>
+  const handleLogin = async (email: string, password: string) =&gt; {
+    setLoading(true);
+    try {
+      const response = await login(email, password).catch((error: Error) =&gt; {
+        throw new Error(`Erreur lors de la connexion : ${error.message}`);
       });
       //check if is logged in        const user = useStore.getState().user;
-<span class="cstat-no" title="statement not covered" >      if (response !== "Connexion réussie") {</span>
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (response !== "Connexion réussie") {
 <span class="cstat-no" title="statement not covered" >        alert("Erreur lors de la connexion : identifiants incorrects.");</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error(response);</span>
       }
       // Rediriger vers la page précédente après la connexion
-<span class="cstat-no" title="statement not covered" >      navigate(previousPage);</span>
+      navigate(previousPage);
     } catch (error) {
-<span class="cstat-no" title="statement not covered" >      alert("Oops nous n'avons pas pu vous connecter, veuillez vérifier vos identifiants et réessayer.");</span>
+      alert("Oops nous n'avons pas pu vous connecter, veuillez vérifier vos identifiants et réessayer.");
     } finally {
-<span class="cstat-no" title="statement not covered" >      setLoading(false);</span>
+      setLoading(false);
     }
 &nbsp;
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
       &lt;div className="flex max-w-md flex-col gap-4 text-sm leading-loose"&gt;
         &lt;LoginForm handleLogin={handleLogin} destination={previousPage} /&gt;
         {loading &amp;&amp; &lt;p&gt;Connexion en cours...&lt;/p&gt;}
@@ -190,7 +190,7 @@ export default function <span class="fstat-no" title="function not covered" >Log
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-13T10:20:51.769Z
+                at 2026-06-13T11:18:23.962Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

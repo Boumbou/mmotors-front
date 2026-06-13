@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">87.5% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>14/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">86.66% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>13/15</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -100,29 +100,29 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -131,30 +131,30 @@
 import useStore  from "./userStore";
 import { RegisterForm } from "@/routes/auth/components/register-form";
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >Register() {</span>
-  const <span class="cstat-no" title="statement not covered" >register = useStore(<span class="fstat-no" title="function not covered" >(s</span>tate: any) =&gt; <span class="cstat-no" title="statement not covered" >state.register)</span>;</span>
-  const <span class="cstat-no" title="statement not covered" >navigate = useNavigate();</span>
-  const <span class="cstat-no" title="statement not covered" >location = useLocation();</span>
-  const destinationPage = <span class="cstat-no" title="statement not covered" >location.state?.from || "/profile";</span>
+export default function Register() {
+  const register = useStore((state: any) =&gt; state.register);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const destinationPage = location.state?.from || "/profile";
   
-  const handleRegister = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async (e</span>mail: string, password: string, name: string, lastName: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    try {</span>
-      const response = <span class="cstat-no" title="statement not covered" >await register(email, password, name, lastName).catch(<span class="fstat-no" title="function not covered" >(e</span>rror: Error) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        alert("Erreur lors de l'inscription : veuillez vérifier vos informations et réessayer.");</span>
-<span class="cstat-no" title="statement not covered" >        throw new Error(`Erreur lors de l'inscription : ${error.message}`);</span>
+  const handleRegister = async (email: string, password: string, name: string, lastName: string) =&gt; {
+    try {
+      const response = await register(email, password, name, lastName).catch((error: Error) =&gt; {
+        alert("Erreur lors de l'inscription : veuillez vérifier vos informations et réessayer.");
+        throw new Error(`Erreur lors de l'inscription : ${error.message}`);
       });
-<span class="cstat-no" title="statement not covered" >      if (response !== "Inscription réussie") {</span>
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (response !== "Inscription réussie") {
 <span class="cstat-no" title="statement not covered" >        alert("Erreur lors de l'inscription : veuillez vérifier vos informations et réessayer.");</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error(response);</span>
       }
-<span class="cstat-no" title="statement not covered" >      navigate(destinationPage);</span>
+      navigate(destinationPage);
     } catch (error) {
-<span class="cstat-no" title="statement not covered" >      console.error(error);</span>
+      console.error(error);
     }
   };
 &nbsp;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
       &lt;div className="flex max-w-md min-w-full flex-col gap-4 text-sm leading-loose mb-30"&gt;
         &lt;RegisterForm handleSubmit={handleRegister} destination={destinationPage} /&gt;
       &lt;/div&gt;
@@ -166,7 +166,7 @@ export default function <span class="fstat-no" title="function not covered" >Reg
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-13T10:20:51.769Z
+                at 2026-06-13T11:18:23.962Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
