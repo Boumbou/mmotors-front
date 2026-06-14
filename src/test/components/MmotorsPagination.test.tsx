@@ -15,7 +15,7 @@ vi.mock("@/components/ui/pagination", () => ({
 // Test suite for the Pagination component.
 describe("MmotorsPagination", () => {
 
-    // Test case to check if the pagination component renders correctly
+    // Test case to check if the pagination component renders the next action on the first page.
     it("renders only the next action on the first page", async () => {
         const user = userEvent.setup();
         const onPageChange = vi.fn();
@@ -29,7 +29,7 @@ describe("MmotorsPagination", () => {
         expect(onPageChange).toHaveBeenCalledWith(2);
     });
 
-    // Test case to check if the pagination component renders both
+    // Test case to check if the pagination component renders only the previous action on the last page
     it("renders only the previous action on the last page", async () => {
         const user = userEvent.setup();
         const onPageChange = vi.fn();
