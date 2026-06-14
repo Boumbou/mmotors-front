@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -156,35 +156,33 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -196,7 +194,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -232,33 +232,33 @@ import {
 } from "@/components/ui/chart"
 import type { ApplicationType } from "@/types/ApplicationType"
 &nbsp;
-export const description = <span class="cstat-no" title="statement not covered" >"A bar chart"</span>
+export const description = "A bar chart"
 &nbsp;
-const chartConfig = <span class="cstat-no" title="statement not covered" >{</span>
+const chartConfig = {
   application: {
     label: "Dossiers",
     color: "var(--chart-1)",
   },
 } satisfies ChartConfig
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >ChartBarDefault({</span>data, title}: {data?: ApplicationType[], title?: string}) {
-    const chartData = <span class="cstat-no" title="statement not covered" >data ? data.map(<span class="fstat-no" title="function not covered" >application =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span></span>
+export default function ChartBarDefault({data, title}: {data?: ApplicationType[], title?: string}) {
+    const chartData = data ? data.map(application =&gt; ({
         month: new Date(application.createdAt).toLocaleString("default", { month: "long" }),
         application: 1,
     })) : []
 &nbsp;
     //group chartData by month and sum application values
-    const groupedData = <span class="cstat-no" title="statement not covered" >chartData.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, curr) =&gt; {</span>
-        const existing = <span class="cstat-no" title="statement not covered" >acc.find(<span class="fstat-no" title="function not covered" >item =&gt; <span class="cstat-no" title="statement not covered" >i</span>tem.month === curr.month)</span>;</span>
-<span class="cstat-no" title="statement not covered" >        if (existing) {</span>
-<span class="cstat-no" title="statement not covered" >            existing.application += curr.application;</span>
+    const groupedData = chartData.reduce((acc, curr) =&gt; {
+        const existing = acc.find(item =&gt; item.month === curr.month);
+        if (existing) {
+            existing.application += curr.application;
         } else {
-<span class="cstat-no" title="statement not covered" >            acc.push(curr);</span>
+            acc.push(curr);
         }
-<span class="cstat-no" title="statement not covered" >        return acc;</span>
+        return acc;
     }, [] as { month: string, application: number }[])
   
-<span class="cstat-no" title="statement not covered" >    return (</span>
+    return (
     &lt;Card className="md:w-100 w-full"&gt;
       &lt;CardHeader&gt;
         &lt;CardTitle&gt;{title}&lt;/CardTitle&gt;
@@ -272,7 +272,7 @@ export default function <span class="fstat-no" title="function not covered" >Cha
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >value.slice(0, 3)}</span>
+              tickFormatter={(value) =&gt; value.slice(0, 3)}
             /&gt;
             &lt;ChartTooltip
               cursor={false}
@@ -298,7 +298,7 @@ export default function <span class="fstat-no" title="function not covered" >Cha
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-13T11:18:23.962Z
+                at 2026-06-14T10:58:08.373Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

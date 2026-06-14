@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>6/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -141,32 +141,29 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -176,7 +173,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -205,30 +205,30 @@ import MmotorsPagination from "@/components/pagination/MmotorsPagination";
 import type { PagedResult } from "@/types/PagedResult";
 import { motion } from "framer-motion";
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >CustomerApplicationList({</span> applications, pagedResult, fetchNextPage }: { applications: ApplicationType[], pagedResult?: PagedResult | null, fetchNextPage: () =&gt; void }) {
-    const <span class="cstat-no" title="statement not covered" >navigate = useNavigate();</span>
-    const <span class="cstat-no" title="statement not covered" >location = useLocation();</span>
-    const isLoading = <span class="cstat-no" title="statement not covered" >applications.length === 0 &amp;&amp; pagedResult === null;</span>
+export default function CustomerApplicationList({ applications, pagedResult, fetchNextPage }: { applications: ApplicationType[], pagedResult?: PagedResult | null, fetchNextPage: () =&gt; void }) {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const isLoading = applications.length === 0 &amp;&amp; pagedResult === null;
 &nbsp;
     //create a skeleton loader for the application list
-    const ApplicationListSkeleton = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()=&gt;{</span></span>
-<span class="cstat-no" title="statement not covered" >        return (</span>
+    const ApplicationListSkeleton = ()=&gt;{
+        return (
             &lt;&gt;
-                {Array.from({ length: 5 }).map(<span class="fstat-no" title="function not covered" >(_</span>, index) =&gt; (
-<span class="cstat-no" title="statement not covered" >                    &lt;Skeleton key={index} className="w-full bg-slate-200 h-20 rounded-md" /&gt;</span>
+                {Array.from({ length: 5 }).map((_, index) =&gt; (
+                    &lt;Skeleton key={index} className="w-full bg-slate-200 h-20 rounded-md" /&gt;
                 ))}
             &lt;/&gt;
         );
     };
     
-<span class="cstat-no" title="statement not covered" >    return (</span>
+    return (
         &lt;div className="flex flex-col gap-4"&gt;
             {
                 isLoading ? 
                 &lt;ApplicationListSkeleton /&gt; : 
                 &lt;&gt;
-                    {applications.map(<span class="fstat-no" title="function not covered" >(a</span>pplication: ApplicationType) =&gt; (
-<span class="cstat-no" title="statement not covered" >                        &lt;motion.div key={application.id} initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }}&gt;</span>
+                    {applications.map((application: ApplicationType) =&gt; (
+                        &lt;motion.div key={application.id} initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }}&gt;
                             &lt;Card className="p-4 flex items-center flex-row rounded-md border"&gt;
                                 &lt;HugeiconsIcon icon={Folder} className="w-12 h-12 text-slate-300" /&gt;
                                 &lt;div className="w-full"&gt;
@@ -240,8 +240,8 @@ export default function <span class="fstat-no" title="function not covered" >Cus
                                     size="icon-lg" 
                                     variant="outline" 
                                     className="ml-auto"
-                                    onClick={<span class="fstat-no" title="function not covered" >() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >                                        navigate(`/application/${application.id}`, { state: { origin: location.pathname, section: "applications" } });</span>
+                                    onClick={() =&gt; {
+                                        navigate(`/application/${application.id}`, { state: { origin: location.pathname, section: "applications" } });
                                     }}
                                     &gt;
                                     &lt;HugeiconsIcon icon={Eye} className="w-5 h-5" /&gt;
@@ -250,8 +250,8 @@ export default function <span class="fstat-no" title="function not covered" >Cus
                         &lt;/motion.div&gt;
                     ))}
                     &lt;MmotorsPagination
-                        totalPages={pagedResult ? pagedResult.totalPages : 0}
-                        currentPage={pagedResult ? pagedResult.pageNumber : 1}
+                        totalPages={pagedResult ? pagedResult.totalPages : <span class="branch-1 cbranch-no" title="branch not covered" >0}</span>
+                        currentPage={pagedResult ? pagedResult.pageNumber : <span class="branch-1 cbranch-no" title="branch not covered" >1}</span>
                         onPageChange={fetchNextPage}
                     /&gt;
                 &lt;/&gt;
@@ -265,7 +265,7 @@ export default function <span class="fstat-no" title="function not covered" >Cus
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-13T11:18:23.962Z
+                at 2026-06-14T10:58:08.373Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

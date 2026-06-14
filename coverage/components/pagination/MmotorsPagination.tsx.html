@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -89,19 +89,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -110,20 +110,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 &nbsp;
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >MmotorsPagination(p</span>rops: { currentPage: number, totalPages: number, onPageChange: (page: number) =&gt; void }) {
-      const { currentPage, totalPages, onPageChange } = <span class="cstat-no" title="statement not covered" >props;</span>
+export default function MmotorsPagination(props: { currentPage: number, totalPages: number, onPageChange: (page: number) =&gt; void }) {
+      const { currentPage, totalPages, onPageChange } = props;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      return(</span>
+      return(
         &lt;Pagination&gt;
           &lt;PaginationContent&gt;
             &lt;PaginationItem&gt;
-              { currentPage&gt;1 &amp;&amp; &lt;PaginationPrevious onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nPageChange(currentPage - 1)} /</span>&gt;}
+              { currentPage&gt;1 &amp;&amp; &lt;PaginationPrevious onClick={() =&gt; onPageChange(currentPage - 1)} /&gt;}
             &lt;/PaginationItem&gt;
             &lt;PaginationItem&gt;
               {`page ${currentPage} sur ${totalPages}`}
             &lt;/PaginationItem&gt;
             &lt;PaginationItem&gt;
-              { currentPage&lt;totalPages &amp;&amp; &lt;PaginationNext onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nPageChange(currentPage + 1)} /</span>&gt;}
+              { currentPage&lt;totalPages &amp;&amp; &lt;PaginationNext onClick={() =&gt; onPageChange(currentPage + 1)} /&gt;}
             &lt;/PaginationItem&gt;
           &lt;/PaginationContent&gt;
         &lt;/Pagination&gt;
@@ -136,7 +136,7 @@ export default function <span class="fstat-no" title="function not covered" >Mmo
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-13T11:18:23.962Z
+                at 2026-06-14T10:58:08.373Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

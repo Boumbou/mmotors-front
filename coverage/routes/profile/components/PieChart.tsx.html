@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">77.77% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>7/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -222,7 +222,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -247,9 +247,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -257,11 +257,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -271,11 +271,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -299,8 +299,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -361,7 +361,7 @@ import {
 import {  ApplicationStatusMap, type ApplicationType } from "@/types/ApplicationType"
 &nbsp;
 &nbsp;
-const chartConfig = <span class="cstat-no" title="statement not covered" >{</span>
+const chartConfig = {
   brouillon: {
     label: "Brouillon",
     color: "var(--chart-1)",
@@ -384,11 +384,11 @@ const chartConfig = <span class="cstat-no" title="statement not covered" >{</spa
   }
 } satisfies ChartConfig
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >ChartPieDonutText({</span>data, title}: {data?: ApplicationType[], title?: string}) {
+export function ChartPieDonutText({data, title}: {data?: ApplicationType[], title?: string}) {
   //format applications array to fit chartData format
-  const formattedData = <span class="cstat-no" title="statement not covered" >React.useMemo(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >    if (!data) <span class="cstat-no" title="statement not covered" >return [];</span></span>
-    const statusCounts: Record&lt;string, number&gt; = <span class="cstat-no" title="statement not covered" >{</span>
+  const formattedData = React.useMemo(() =&gt; {
+    if (!data) return [];
+    const statusCounts: Record&lt;string, number&gt; = {
       "Brouillon": 0,
       "En attente": 0,
       "Soumis": 0,
@@ -396,11 +396,11 @@ export function <span class="fstat-no" title="function not covered" >ChartPieDon
       "Rejeté": 0,
     };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    data.forEach(<span class="fstat-no" title="function not covered" >(a</span>pplication) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      statusCounts[ApplicationStatusMap[application.status].label]++;</span>
+    data.forEach((application) =&gt; {
+      statusCounts[ApplicationStatusMap[application.status].label]++;
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return [</span>
+    return [
       { status: "Brouillon", dossiers: statusCounts["Brouillon"], fill: chartConfig.brouillon.color },
       { status: "En attente", dossiers: statusCounts["En attente"], fill: chartConfig.enAttente.color },
       { status: "Soumis", dossiers: statusCounts["Soumis"], fill: chartConfig.soumis.color },
@@ -410,11 +410,11 @@ export function <span class="fstat-no" title="function not covered" >ChartPieDon
   }, [data])
   
   
-    const totalApplications = <span class="cstat-no" title="statement not covered" >React.useMemo(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >    return formattedData.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, curr) =&gt; <span class="cstat-no" title="statement not covered" >acc + curr.dossiers, 0</span>)</span>
+    const totalApplications = React.useMemo(() =&gt; {
+    return formattedData.reduce((acc, curr) =&gt; acc + curr.dossiers, 0)
   }, [formattedData])
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;Card className="flex flex-col min-w-50 w-full md:w-1/3"&gt;
       &lt;CardHeader className="items-center pb-0"&gt;
         &lt;CardTitle&gt;{title}&lt;/CardTitle&gt;
@@ -437,9 +437,9 @@ export function <span class="fstat-no" title="function not covered" >ChartPieDon
               strokeWidth={5}
             &gt;
               &lt;Label
-                content={<span class="fstat-no" title="function not covered" >({</span> viewBox }) =&gt; {
-<span class="cstat-no" title="statement not covered" >                  if (viewBox &amp;&amp; "cx" in viewBox &amp;&amp; "cy" in viewBox) {</span>
-<span class="cstat-no" title="statement not covered" >                    return (</span>
+                content={({ viewBox }) =&gt; {
+                  <span class="missing-if-branch" title="else path not taken" >E</span>if (viewBox &amp;&amp; "cx" in viewBox &amp;&amp; "cy" in viewBox) {
+                    return (
                       &lt;text
                         x={viewBox.cx}
                         y={viewBox.cy}
@@ -455,7 +455,7 @@ export function <span class="fstat-no" title="function not covered" >ChartPieDon
                         &lt;/tspan&gt;
                         &lt;tspan
                           x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
+                          y={(viewBox.cy || <span class="branch-1 cbranch-no" title="branch not covered" >0) + 2</span>4}
                           className="fill-muted-foreground"
                         &gt;
                           Dossiers
@@ -487,7 +487,7 @@ export function <span class="fstat-no" title="function not covered" >ChartPieDon
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-13T11:18:23.962Z
+                at 2026-06-14T10:58:08.373Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -177,17 +177,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -209,14 +205,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -230,7 +230,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -249,7 +249,7 @@ import type { ListingType } from "@/types/VehicleType"
 import type { ServiceType } from "@/types/ServiceType"
 &nbsp;
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >NewApplication( </span>
+export default function NewApplication( 
     { 
         listingType, 
         availableServices, 
@@ -263,13 +263,13 @@ export default function <span class="fstat-no" title="function not covered" >New
         onCheckboxChange: (serviceId: number) =&gt; void ,
         onInitiateApplication: () =&gt; void
     }) {
-    const <span class="cstat-no" title="statement not covered" >navigate = useNavigate();</span>
-    const <span class="cstat-no" title="statement not covered" >location = useLocation();</span>
-    const <span class="cstat-no" title="statement not covered" >user = useStore(<span class="fstat-no" title="function not covered" >(s</span>tate: any) =&gt; <span class="cstat-no" title="statement not covered" >state.user)</span>;</span>
+    const navigate = useNavigate();
+    const location = useLocation();
+    const user = useStore((state: any) =&gt; state.user);
 &nbsp;
 &nbsp;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return (</span>
+    return (
         &lt;div className=" lg:basis-1/2 basis-full flex-col gap-10 p-8 align-stretch rounded-lg bg-white "&gt;
                             &lt;div className="flex flex-row justify-between mb-10"&gt;
                                 &lt;h2 className="md:text-2xl  text-lg font-medium"&gt;Soumettre un dossier&lt;/h2&gt;
@@ -294,15 +294,15 @@ export default function <span class="fstat-no" title="function not covered" >New
                             }
 &nbsp;
                             {availableServices.length &gt; 0 ? (
-                                availableServices.map(<span class="fstat-no" title="function not covered" >(s</span>ervice: ServiceType) =&gt; (
-<span class="cstat-no" title="statement not covered" >                                    &lt;FieldGroup key={service.id} className="max-w-sm"&gt;</span>
+                                availableServices.map((service: ServiceType) =&gt; (
+                                    &lt;FieldGroup key={service.id} className="max-w-sm"&gt;
                                         &lt;Field orientation="horizontal"&gt;
                                             &lt;Checkbox 
                                                 id={service.id.toString()} 
                                                 name={service.name} 
                                                 className="mr-2 font-lg" 
                                                 defaultChecked={selectedServices.includes(service.id)} 
-                                                onCheckedChange={<span class="fstat-no" title="function not covered" >()=&gt; <span class="cstat-no" title="statement not covered" >o</span>nCheckboxChange(service.id)} </span>
+                                                onCheckedChange={()=&gt; onCheckboxChange(service.id)} 
                                             /&gt;
                                             &lt;FieldLabel  htmlFor={service.name} className="text-md" &gt;{service.name}&lt;/FieldLabel&gt;
                                         &lt;/Field&gt;
@@ -316,7 +316,7 @@ export default function <span class="fstat-no" title="function not covered" >New
                             ) : (
                                 &lt;&gt;
                                     &lt;p&gt;Connectez vous pour soumettre un dossier.&lt;/p&gt;
-                                    &lt;Button className="w-full bg-black mt-20" onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >n</span>avigate("/auth/login", { state: { from: location.pathname } })}&gt;C</span>onnectez-vous&lt;/Button&gt;
+                                    &lt;Button className="w-full bg-black mt-20" onClick={() =&gt; navigate("/auth/login", { state: { from: location.pathname } })}&gt;Connectez-vous&lt;/Button&gt;
                                 &lt;/&gt;
                             )}
                         &lt;/div&gt;
@@ -328,7 +328,7 @@ export default function <span class="fstat-no" title="function not covered" >New
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-13T11:18:23.962Z
+                at 2026-06-14T10:58:08.373Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">94.11% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>16/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">87.5% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>7/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">91.66% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>11/12</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -161,23 +161,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -212,7 +209,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -244,21 +244,21 @@ import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >CustomerProfile({</span> applications, changeSectionCallBack }: { applications: ApplicationType[], changeSectionCallBack: (section: string) =&gt; void }) {
-    const <span class="cstat-no" title="statement not covered" >user: User | null = useStore(<span class="fstat-no" title="function not covered" >(s</span>tate: any) =&gt; <span class="cstat-no" title="statement not covered" >state.user)</span></span>
-    const <span class="cstat-no" title="statement not covered" >navigate = useNavigate();</span>
-    const ongoingApplications = <span class="cstat-no" title="statement not covered" >applications.filter(<span class="fstat-no" title="function not covered" >app =&gt; <span class="cstat-no" title="statement not covered" >a</span>pp.status === ApplicationStatus.Submitted)</span>.length;</span>
-    const draftApplications = <span class="cstat-no" title="statement not covered" >applications.filter(<span class="fstat-no" title="function not covered" >app =&gt; <span class="cstat-no" title="statement not covered" >a</span>pp.status === ApplicationStatus.Draft)</span>.length;</span>
-    const onHoldApplications = <span class="cstat-no" title="statement not covered" >applications.filter(<span class="fstat-no" title="function not covered" >app =&gt; <span class="cstat-no" title="statement not covered" >a</span>pp.status === ApplicationStatus.OnHold)</span>.length;</span>
-    const approvedApplications = <span class="cstat-no" title="statement not covered" >applications.filter(<span class="fstat-no" title="function not covered" >app =&gt; <span class="cstat-no" title="statement not covered" >a</span>pp.status === ApplicationStatus.Approved)</span>.length;</span>
+export default function CustomerProfile({ applications, changeSectionCallBack }: { applications: ApplicationType[], changeSectionCallBack: (section: string) =&gt; void }) {
+    const user: User | null = useStore((state: any) =&gt; state.user)
+    const navigate = useNavigate();
+    const ongoingApplications = applications.filter(app =&gt; app.status === ApplicationStatus.Submitted).length;
+    const draftApplications = applications.filter(app =&gt; app.status === ApplicationStatus.Draft).length;
+    const onHoldApplications = applications.filter(app =&gt; app.status === ApplicationStatus.OnHold).length;
+    const approvedApplications = applications.filter(app =&gt; app.status === ApplicationStatus.Approved).length;
 &nbsp;
     //fetch userid from userStore
-<span class="cstat-no" title="statement not covered" >    if (!user) {</span>
-<span class="cstat-no" title="statement not covered" >        navigate("/auth/login");</span>
-<span class="cstat-no" title="statement not covered" >        return null;</span>
+    if (!user) {
+        navigate("/auth/login");
+        return null;
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return (</span>
+    return (
         &lt;motion.div initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }}&gt;
             &lt;div className="flex w-full in-h-svh p-6"&gt;
                     &lt;div className="flex w-full  flex-col gap-4 text-sm leading-loose"&gt;
@@ -296,7 +296,7 @@ export default function <span class="fstat-no" title="function not covered" >Cus
                                 
                             &lt;/CardContent&gt;
                             &lt;CardAction  className="min-h-10 w-full"&gt;
-                                &lt;Button onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >c</span>hangeSectionCallBack("applications")}v</span>ariant="outline" size="icon-lg" className="h-full w-full text-sm font-medium"&gt;Voir tous mes dossiers&lt;/Button&gt;
+                                &lt;Button onClick={() =&gt; changeSectionCallBack("applications")}variant="outline" size="icon-lg" className="h-full w-full text-sm font-medium"&gt;Voir tous mes dossiers&lt;/Button&gt;
                             &lt;/CardAction&gt;
                         &lt;/Card&gt;
 &nbsp;
@@ -322,7 +322,7 @@ export default function <span class="fstat-no" title="function not covered" >Cus
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-13T11:18:23.962Z
+                at 2026-06-14T10:58:08.373Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
