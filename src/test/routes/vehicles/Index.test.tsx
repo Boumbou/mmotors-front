@@ -24,11 +24,22 @@ vi.mock("@/components/ui/toggle-group", () => ({
   ToggleGroup: ({ children, onValueChange }: { children: React.ReactNode; onValueChange: (value: string | undefined) => void }) => (
     <div>
       {React.Children.map(children, (child) =>
-        React.isValidElement(child)
-          ? React.cloneElement(child, {
-              onClick: () => onValueChange(String(child.props.value)),
-            })
-          : child,
+        {
+            if(React.isValidElement(child)){
+                const originalProps = child.props as React.ComponentProps<any>
+                const value:string = String(originalProps.value)  || ""; 
+                return React.cloneElement(child, {
+                    ...originalProps,
+                onClick: () => onValueChange(String(value)),
+                'data-value': String(value), 
+                });
+
+            }
+
+            return child
+
+
+        }
       )}
     </div>
   ),
